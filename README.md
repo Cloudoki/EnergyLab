@@ -8,10 +8,14 @@ Install dependencies by running `ionic state reset` and add Crosswalk-Project pl
 
 ## IOS (not tested yet)
 Add platform `ionic platform add ios`
+
 Build `ionic build ios`
+
 Open Xcode in platform/ios/ to test on device.
 
 ## Android
 Add platform `ionic platform add android`
+
 Build `ionic build android`
+
 Run on device/emulator `ionic run android`
