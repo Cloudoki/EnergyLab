@@ -1,0 +1,22 @@
+{
+  "name": "energylab",
+  "description": "EnergyLab: An Ionic project",
+  "main": "",
+  "authors": [
+    "Nuno Jorge"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.1"
+  }
+}
