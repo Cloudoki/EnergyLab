@@ -4,5 +4,6 @@
 node_modules/
 platforms/
 plugins/
-builder/node_modules
-builder/bower_components
+builder/node_modules/
+builder/bower_components/
+.idea/
