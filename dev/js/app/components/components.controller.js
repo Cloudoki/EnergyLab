@@ -16,6 +16,8 @@ function MenuTopCtrl($rootScope, $scope, $element, factoryData) {
       $(e.currentTarget).data('menuIndex'),
       $(e.currentTarget).data('menuName')
     );
+
+    $rootScope.$broadcast('playVideo', $(e.currentTarget).data('menuIndex'));
   };
 
   $scope.open = function() {
@@ -122,10 +124,12 @@ function InfoCtrl($rootScope, $scope, $element, $timeout) {
 
 function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils) {
 
-  var videos = [],
-      _videoIndex = 0;
+  var videos = [];
 
   function resetVideos() {
+    $($element).find('.vid-layer')
+      .html('');
+
     $.each(videos, function(i, el) {
       el.currentTime = 0;
       el.pause();
@@ -154,27 +158,28 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
     console.log("->loadVideos");
   }
 
-  function playVideo() {
+  function playVideo(index) {
 
-   /* $($element).find('.vid-layer')
-      .html('')
-      .append(videos[0]);*/
+    resetVideos();
 
-    $(videos[_videoIndex])
+    /* $($element).find('.vid-layer')
+        .html('')
+        .append(videos[0]);*/
+
+    index = index || 0;
+
+    $(videos[index])
       .off('play').on('play', function() {
-        /*var c = $('#vid-canvas').get(0),
-            v = $(this).get(0);
-
-        console.log("->play video", v.videoWidth, v.videoHeight);
-        c.width = v.videoWidth;
-        c.height = v.videoHeight;
-        draw(this, c.getContext('2d'), v.videoWidth,  v.videoHeight);*/
       })
       .off('ended').on('ended', function() {
         $scope.close();
+      })
+      .off('click').on('click', function() {
+        this.paused ? this.play() : this.pause();
       });
 
-    videos[_videoIndex].play();
+    videos[index].play();
+    $($element).find('.vid-layer').append(videos[index]);
   }
 
   function draw(v,c,w,h) {
@@ -203,9 +208,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
       el.find('#vid-canvas').removeClass('hidden');
     }, Config.triggers.sven.transition * 3);
 
-    _videoIndex = _videoIndex == Config.triggers.sven.videos.length-1 ? 0 : _videoIndex+1;
     playVideo();
-    $($element).find('.vid-layer').append(videos[_videoIndex]);
   };
 
   $scope.close = function () {
@@ -213,13 +216,8 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
       .hide()
       .find('.mid-layer, .vid-layer').addClass('hidden');
 
-    $($element).find('.vid-layer')
-      .html('');
-
     resetVideos();
   };
-
-  //$scope.close();
 
   $rootScope.$on('svenOpen', function () {
     $timeout(function(){
@@ -229,6 +227,11 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
 
   $rootScope.$on('svenClose', function () {
     $scope.close();
+  });
+
+  $scope.$on('playVideo', function (e, index) {
+    console.log("PLAY_VIDEO", index+1);
+    playVideo(index + 1)
   });
 
   loadVideos();
