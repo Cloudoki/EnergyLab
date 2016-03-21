@@ -16,10 +16,10 @@ var Config = {
       sven: {
         transition: 300, // miliseconds
         videos: [
-          'img/Composition068.mp4',
+          'img/Composition067.mp4',
           'img/Composition075.mp4',
-          'img/Composition081.mp4',
-          'img/Composition082.mp4'
+          'img/Composition076.mp4',
+          'img/Composition081.mp4'
         ]
       },
       soda: {

@@ -3,17 +3,17 @@
     "top": [
       {
         "id": 1,
-        "name": "Conditie",
+        "name": "Voeding",
         "image": ""
       },
       {
         "id": 2,
-        "name": "Bike fit ",
+        "name": "Conditie",
         "image": ""
       },
       {
         "id": 3,
-        "name": "Voeding",
+        "name": "Bodyscen",
         "image": ""
       }
     ],

@@ -215,7 +215,9 @@
   right: 0;
   left: 0;
   margin: auto;
-  /*display: none;*/
+  opacity: 0;
+  -webkit-transition: all ease .5s;
+  transition: all ease .5s;
 }
 
 .triggered-soda {
@@ -350,7 +352,8 @@
   opacity: 0;
 }
 .pane {
-  background: url(../img/dummy.jpg) no-repeat;
+  /*background: url(../img/dummy.jpg) no-repeat;*/
+  background: transparent !important;
   background-size: cover;
   -webkit-transition: all ease 300ms;
   transition: all ease 300ms;
@@ -370,6 +373,9 @@
 }
 .hidden {
   opacity: 0;
+}
+.visible {
+  opacity: 1 !important;
 }
 /* IPHONE 4 */
 @media only screen and (max-height : 480px) {

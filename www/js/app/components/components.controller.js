@@ -133,6 +133,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
     $.each(videos, function(i, el) {
       el.currentTime = 0;
       el.pause();
+      $(el).removeClass('visible');
     });
   }
 
@@ -141,6 +142,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
     $.each(Config.triggers.sven.videos, function(i, el) {
       var vid = document.createElement("video");
       vid.setAttribute('webkit-playsinline', '');
+      vid.setAttribute('poster', 'img/white-bg.png');
 
       vid.muted = false;
       vid.autoplay = false;
@@ -160,11 +162,18 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
 
   function playVideo(index) {
 
-    resetVideos();
+    var el = $($element);
 
-    /* $($element).find('.vid-layer')
-        .html('')
-        .append(videos[0]);*/
+    el.show();
+
+    $timeout(function(){
+      el.find('.mid-layer').removeClass('hidden');
+    }, Config.triggers.sven.transition);
+    $timeout(function(){
+      el.find('.vid-layer').removeClass('hidden');
+    }, Config.triggers.sven.transition * 2);
+
+    resetVideos();
 
     index = index || 0;
 
@@ -172,14 +181,27 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
       .off('play').on('play', function() {
       })
       .off('ended').on('ended', function() {
-        $scope.close();
+        $(videos[index]).removeClass('visible');
+        //$scope.close();
+        $(videos[index]).one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
+          function(e) {
+            $scope.close();
+          });
       })
       .off('click').on('click', function() {
         this.paused ? this.play() : this.pause();
       });
 
-    videos[index].play();
     $($element).find('.vid-layer').append(videos[index]);
+
+    $timeout(function(){
+      $(videos[index]).addClass('visible');
+    }, 100);
+
+    $(videos[index]).one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
+      function(e) {
+        videos[index].play();
+      });
   }
 
   function draw(v,c,w,h) {
@@ -194,20 +216,6 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
   };
 
   $scope.open = function () {
-
-    var el = $($element);
-    el.show();
-
-    $timeout(function(){
-      el.find('.mid-layer').removeClass('hidden');
-    }, Config.triggers.sven.transition);
-    $timeout(function(){
-      el.find('.vid-layer').removeClass('hidden');
-    }, Config.triggers.sven.transition * 2);
-    $timeout(function(){
-      el.find('#vid-canvas').removeClass('hidden');
-    }, Config.triggers.sven.transition * 3);
-
     playVideo();
   };
 
