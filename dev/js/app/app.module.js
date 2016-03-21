@@ -10,13 +10,13 @@ angular
     .controller('AppCtrl', AppCtrl)
     .run(init);
 
-function AppCtrl($rootScope, $scope, factoryData) {
+function AppCtrl($rootScope, $scope) {
   $scope.onSwipeLeft = function() {
     $rootScope.$broadcast($rootScope.activeTrigger === 1 ? 'sodaOpen' : $rootScope.activeTrigger === 2 ? 'infoOpen' : '');
   };
 }
 
-function init($ionicPlatform, $timeout) {
+function init($ionicPlatform) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -34,6 +34,9 @@ function init($ionicPlatform, $timeout) {
       StatusBar.hide();
       //$cordovaStatusbar.overlaysWebView(true);
     }
+
+    if (Config.dummyBg)
+      $('.pane').addClass('dummy');
 
     /*if (cordova && cordova.platformId) {
       $('.pane').addClass('hide');

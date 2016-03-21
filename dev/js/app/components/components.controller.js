@@ -7,17 +7,36 @@ angular
   .controller('TriggeredSodaCtrl', TriggeredSodaCtrl)
 	.run(init);
 
-function MenuTopCtrl($rootScope, $scope, $element, factoryData) {
+function MenuTopCtrl($rootScope, $scope, $element, factoryData, $timeout) {
+
+  var _interact = true,
+      _active;
+
+  function reset() {
+    _active = null;
+    $($element).find('li').removeClass('active');
+  }
 
   $scope.menus = factoryData.menus.top;
 
   $scope.click = function(e) {
-    console.log('TODO:// add code for MenuTopCtrl click here ..',
-      $(e.currentTarget).data('menuIndex'),
-      $(e.currentTarget).data('menuName')
-    );
 
-    $rootScope.$broadcast('playVideo', $(e.currentTarget).data('menuIndex'));
+    var el = $(e.currentTarget),
+        index = el.data('menuIndex');
+
+    if (!_interact || _active === index) return;
+    _interact = false;
+
+    reset();
+    el.addClass('active');
+
+    _active = index;
+
+    $rootScope.$broadcast('playVideo', index);
+
+    $timeout(function() {
+      _interact = true;
+    }, 1000);
   };
 
   $scope.open = function() {
@@ -28,6 +47,7 @@ function MenuTopCtrl($rootScope, $scope, $element, factoryData) {
   $scope.close = function() {
     $($element).find('.el-menu.top').addClass('closed');
     $($element).find('.el-menu-open').addClass('closed');
+    reset();
   };
 
   $scope.toggle = function() {
@@ -54,6 +74,10 @@ function MenuTopCtrl($rootScope, $scope, $element, factoryData) {
   $rootScope.$on('menuClose', function (event) {
     $scope.close();
   });
+
+  $rootScope.$on('videoEnded', function (event) {
+    reset();
+  });
 }
 
 function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryUtils) {
@@ -75,7 +99,7 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
 
     $timeout(function() {
       _interact = true;
-    }, 200);
+    }, 500);
   }
 
   $scope.menus = factoryData.menus.bottom;
@@ -124,7 +148,8 @@ function InfoCtrl($rootScope, $scope, $element, $timeout) {
 
 function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils) {
 
-  var videos = [];
+  var videos = [],
+      interact = true;
 
   function resetVideos() {
     $($element).find('.vid-layer')
@@ -181,6 +206,8 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
       .off('play').on('play', function() {
       })
       .off('ended').on('ended', function() {
+        $rootScope.$broadcast('videoEnded');
+
         $(videos[index]).removeClass('visible');
         //$scope.close();
         $(videos[index]).one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
@@ -197,11 +224,14 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
     $timeout(function(){
       $(videos[index]).addClass('visible');
     }, 100);
+    $timeout(function(){
+      videos[index].play();
+    }, 500);
 
-    $(videos[index]).one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
+    /*$(videos[index]).one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
       function(e) {
         videos[index].play();
-      });
+      });*/
   }
 
   function draw(v,c,w,h) {
@@ -309,7 +339,9 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData) 
   $rootScope
     .$on('sodaOpen', function () {
       $scope.open();
-      $scope.anim();
+      $timeout(function(){
+        $scope.anim();
+      }, 200);
     });
   $rootScope
     .$on('sodaClose', function (event) {

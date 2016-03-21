@@ -10,7 +10,7 @@ angular
     .controller('AppCtrl', AppCtrl)
     .run(init);
 
-function AppCtrl($rootScope, $scope, factoryData) {
+function AppCtrl($rootScope, $scope) {
   $scope.onSwipeLeft = function() {
     $rootScope.$broadcast($rootScope.activeTrigger === 1 ? 'sodaOpen' : $rootScope.activeTrigger === 2 ? 'infoOpen' : '');
   };
@@ -34,6 +34,9 @@ function init($ionicPlatform, $timeout) {
       StatusBar.hide();
       //$cordovaStatusbar.overlaysWebView(true);
     }
+
+    if (Config.dummyBg)
+      $('.pane').addClass('dummy');
 
     /*if (cordova && cordova.platformId) {
       $('.pane').addClass('hide');

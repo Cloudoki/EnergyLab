@@ -1,4 +1,5 @@
 var Config = {
+    dummyBg: false,
     date: {
         format: 'd mm y',
         separator: [' ', ' ']
