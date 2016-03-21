@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b087593e-419b-4611-9349-82e351ad96a2" name="Default" comment="Updated the  of top menu. Current selected tab status">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/css/app-styles.min.css" afterPath="$PROJECT_DIR$/www/css/app-styles.min.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/js/app/app.module.js" afterPath="$PROJECT_DIR$/dev/js/app/app.module.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/app/app.module.js" afterPath="$PROJECT_DIR$/www/js/app/app.module.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/js/app/components/components.controller.js" afterPath="$PROJECT_DIR$/dev/js/app/components/components.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/app/components/components.controller.js" afterPath="$PROJECT_DIR$/www/js/app/components/components.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/config.js" afterPath="$PROJECT_DIR$/dev/config.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/config.js" afterPath="$PROJECT_DIR$/www/config.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/css/style.css" afterPath="$PROJECT_DIR$/dev/css/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/partials/triggered.sven.html" afterPath="$PROJECT_DIR$/dev/partials/triggered.sven.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/partials/triggered.sven.html" afterPath="$PROJECT_DIR$/www/partials/triggered.sven.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+    <list default="true" id="b087593e-419b-4611-9349-82e351ad96a2" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="EnergyLab.iws" />
@@ -207,8 +196,8 @@
       <file leaf-file-name="style.css" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dev/css/style.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.48141593">
-              <caret line="38" column="55" selection-start-line="38" selection-start-column="55" selection-end-line="38" selection-end-column="55" />
+            <state vertical-scroll-proportion="0.9327434">
+              <caret line="156" column="1" selection-start-line="156" selection-start-column="1" selection-end-line="156" selection-end-column="1" />
               <folding>
                 <element signature="e#48#142#0" expanded="false" />
                 <element signature="e#164#249#0" expanded="false" />
@@ -216,6 +205,7 @@
                 <element signature="e#448#467#0" expanded="false" />
                 <element signature="e#504#555#0" expanded="false" />
                 <element signature="e#575#660#0" expanded="false" />
+                <element signature="e#674#994#0" expanded="false" />
                 <element signature="e#1015#1047#0" expanded="false" />
                 <element signature="e#1062#1301#0" expanded="false" />
                 <element signature="e#1323#1355#0" expanded="false" />
@@ -540,6 +530,13 @@
       <option name="number" value="Default" />
       <updated>1457092235793</updated>
     </task>
+    <task id="LOCAL-00001" summary="Updated the  of top menu. Current selected tab status">
+      <created>1458581649189</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1458581649189</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -579,6 +576,8 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="Updated the  of top menu. Current selected tab status" />
     <option name="LAST_COMMIT_MESSAGE" value="Updated the  of top menu. Current selected tab status" />
   </component>
@@ -745,6 +744,7 @@
             <element signature="e#448#467#0" expanded="false" />
             <element signature="e#504#555#0" expanded="false" />
             <element signature="e#575#660#0" expanded="false" />
+            <element signature="e#674#994#0" expanded="false" />
             <element signature="e#1015#1047#0" expanded="false" />
             <element signature="e#1062#1301#0" expanded="false" />
             <element signature="e#1323#1355#0" expanded="false" />
@@ -984,6 +984,7 @@
             <element signature="e#448#467#0" expanded="false" />
             <element signature="e#504#555#0" expanded="false" />
             <element signature="e#575#660#0" expanded="false" />
+            <element signature="e#674#994#0" expanded="false" />
             <element signature="e#1015#1047#0" expanded="false" />
             <element signature="e#1062#1301#0" expanded="false" />
             <element signature="e#1323#1355#0" expanded="false" />
@@ -1416,8 +1417,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dev/css/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48141593">
-          <caret line="38" column="55" selection-start-line="38" selection-start-column="55" selection-end-line="38" selection-end-column="55" />
+        <state vertical-scroll-proportion="0.9327434">
+          <caret line="156" column="1" selection-start-line="156" selection-start-column="1" selection-end-line="156" selection-end-column="1" />
           <folding>
             <element signature="e#48#142#0" expanded="false" />
             <element signature="e#164#249#0" expanded="false" />
@@ -1425,6 +1426,7 @@
             <element signature="e#448#467#0" expanded="false" />
             <element signature="e#504#555#0" expanded="false" />
             <element signature="e#575#660#0" expanded="false" />
+            <element signature="e#674#994#0" expanded="false" />
             <element signature="e#1015#1047#0" expanded="false" />
             <element signature="e#1062#1301#0" expanded="false" />
             <element signature="e#1323#1355#0" expanded="false" />
