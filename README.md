@@ -1,12 +1,12 @@
 # EnergyLab
 
 ## Installation
-Install cordova and ionic globally with `npm install -g cordova ionic`. 
+Install cordova and ionic globally with `npm install -g cordova ionic`.
 
 ## Dependencies
-Install dependencies by running `ionic state reset` and add ARToolKit Cordova Plugin `cordova plugin add https://github.com/Cloudoki/ARToolKitCordovaPlugin.git`
+Install the dependencies by running `ionic state reset` and add Image Detection Plugin `ionic plugin add https://github.com/Cloudoki/ImageDetectionCordovaPlugin.git` for git or clone the repository and run `ionic plugin add ../path/to/ImageDetectionCordovaPlugin`
 
-## IOS (not tested yet)
+## IOS
 Add platform `ionic platform add ios`
 
 Build `ionic build ios`
