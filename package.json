@@ -20,8 +20,8 @@
     "cordova-plugin-whitelist",
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
-    "ionic-plugin-keyboard",
-    "..\\ARToolKitCordovaPlugin"
+    "../ImageDetectionPlugin",
+    "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
     "ios"
