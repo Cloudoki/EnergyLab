@@ -148,7 +148,7 @@ function InfoCtrl($rootScope, $scope, $element, $timeout) {
 
 function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils) {
 
-  var videos = [],
+  window.videos = [],
       interact = true;
 
   function resetVideos() {
@@ -156,8 +156,9 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
       .html('');
 
     $.each(videos, function(i, el) {
-      el.currentTime = 0;
-      el.pause();
+      // el.currentTime = 0;
+      // el.pause();
+			el.load();
       $(el).removeClass('visible');
     });
   }
