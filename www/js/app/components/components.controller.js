@@ -156,6 +156,9 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   function resetVideo() {
     $('#sven-video').attr('src', '');
+    var el = $($element);
+    el.find('.mid-layer').addClass('hidden');
+    el.find('.vid-layer').addClass('hidden');
   }
 
   function loadVideos() {
@@ -166,6 +169,8 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
   }
 
   function playVideo(index) {
+
+    resetVideo();
 
     var el = $($element), interval = true;
 

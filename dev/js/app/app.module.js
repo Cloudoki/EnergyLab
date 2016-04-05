@@ -13,7 +13,6 @@ angular
 
 function AppCtrl($rootScope, $scope, factoryDetection) {
   $scope.onSwipeLeft = function() {
-    console.log("swipe_area");
     $rootScope.$broadcast(factoryDetection.activeTrigger.index === 2 ? 'infoOpen' : '');
   };
 }
