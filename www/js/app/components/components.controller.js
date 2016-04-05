@@ -272,6 +272,8 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
   });
 
   loadVideos();
+
+  $scope.close();
 }
 
 function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
