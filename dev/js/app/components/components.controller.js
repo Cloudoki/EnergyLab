@@ -152,20 +152,7 @@ function InfoCtrl($rootScope, $scope, $element, $timeout) {
 
 function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
 
-  window.videos = [], window.videoz = [];
-  var interact = true;
-
-  /*function resetVideos() {
-    $($element).find('.vid-layer')
-      .html('');
-
-    $.each(videos, function(i, el) {
-      // el.currentTime = 0;
-      // el.pause();
-			el.load();
-      $(el).removeClass('visible');
-    });
-  }*/
+  window.videos = [];
 
   function resetVideo() {
     $('#sven-video').attr('src', '');
@@ -174,22 +161,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
   function loadVideos() {
 
     $.each(Config.triggers.sven.videos, function(i, el) {
-      /*var vid = document.createElement("video");
-      vid.setAttribute('webkit-playsinline', '');
-      vid.setAttribute('poster', 'img/white-bg.png');
-
-      vid.muted = false;
-      vid.autoplay = false;
-      vid.loop = false;
-      vid.preload = "auto";
-      vid.controls = false;
-
-      var source = document.createElement("source");
-      source.src = el;
-      source.type = "video/mp4";
-      vid.appendChild(source);
-      videos.push(vid);*/
-      window.videoz.push(el);
+      window.videos.push(el);
     });
   }
 
@@ -206,43 +178,9 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
       el.find('.vid-layer').removeClass('hidden');
     }, Config.triggers.sven.transition * 2);
 
-    //resetVideos();
-
     index = index || 0;
 
-    /*$(videos[index])
-			.on('canplay', function() {
-        clearInterval(interval);
-				console.log("canplay - ", this);
-        var vid = this;
-				if(vid.paused || vid.ended) vid.play();
-      })
-      .on('loadedmetadata', function() {
-        clearInterval(interval);
-        console.log("loadedmetadata - ", this);
-        var vid = this;
-        var vidH = vid.videoHeight;
-        var vidW = vid.videoWidth;
-        vid.height = window.innerHeight;
-        vid.width = (vidW * vidH)/window.innerHeight;
-        if(vid.paused || vid.ended) vid.play();
-      })
-      .off('ended').on('ended', function() {
-        $rootScope.$broadcast('videoEnded');
-
-        $(videos[index]).removeClass('visible');
-        //$scope.close();
-        $(videos[index]).one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
-          function(e) {
-            $scope.close();
-          });
-      })
-      .off('click').on('click', function() {
-        this.paused ? this.play() : this.pause();
-      });*/
-
-    //$($element).find('.vid-layer').append(videos[index]);
-    $('#sven-video').attr('src', videoz[index]);
+    $('#sven-video').attr('src', videos[index]);
 
     $timeout(function(){
       $('#sven-video').addClass('visible');
@@ -263,7 +201,6 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
       .hide()
       .find('.mid-layer, .vid-layer').addClass('hidden');
 
-    //resetVideos();
     resetVideo();
   };
 
