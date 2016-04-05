@@ -26,9 +26,6 @@ function factoryDetection($rootScope) {
     $rootScope.$broadcast(_eventName + _activeTrigger.index + ':false');
   }
 
-  /*function closeLastTrigger() {
-    console.log('close:', _lastTrigger);
-  }*/
 
   function init() {
 
@@ -97,7 +94,8 @@ function factoryDetection($rootScope) {
     get eventName() {
       return _eventName;
     },
-    init: init
+    init: init,
+    removeLastTrigger: isNotDetecting
   };
 }
 

@@ -88,10 +88,14 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
     if (!_interact) return;
     _interact = false;
 
+    var setTrigger = !!el;
+
     el = el || $($element).find('li').eq(factoryDetection.activeTrigger.index);
     $($element).find('li').removeClass('active');
     el.addClass('active');
-    factoryDetection.activeTrigger = {index: el.index()};
+
+    if (setTrigger)
+      factoryDetection.activeTrigger = {index: el.index()};
 
     $rootScope.$broadcast(factoryDetection.activeTrigger.index > 0 ? 'menuClose' : 'menuOpen');
     /*$rootScope.$broadcast(factoryDetection.activeTrigger.index == 1 ? 'sodaOpen' : 'sodaClose');
@@ -112,12 +116,14 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
 
   $scope.onSwipeLeft = function() {
     if (factoryDetection.activeTrigger.index === 0) return;
+    factoryDetection.removeLastTrigger();
     factoryDetection.activeTrigger.index--;
     activeTriggerTab();
   };
 
   $scope.onSwipeRight = function() {
     if (factoryDetection.activeTrigger.index === 2) return;
+    factoryDetection.removeLastTrigger();
     factoryDetection.activeTrigger.index++;
     activeTriggerTab();
   };
@@ -204,11 +210,19 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     $(videos[index])
       .off('play').on('play', function() {
       })
-      .off('canplay').on('canplay', function() {
+			.on('canplay', function() {
+				console.log("canplay - ", this);
         var vid = this;
-        $timeout(function(){
-          vid.play();
-        }, 500);
+				if(vid.paused || vid.ended) vid.play();
+      })
+      .on('loadedmetadata', function() {
+        console.log("loadedmetadata - ", this);
+        var vid = this;
+        var vidH = vid.videoHeight;
+        var vidW = vid.videoWidth;
+        vid.height = window.innerHeight;
+        vid.width = (vidW * vidH)/window.innerHeight;
+        if(vid.paused || vid.ended) vid.play();
       })
       .off('ended').on('ended', function() {
         $rootScope.$broadcast('videoEnded');
