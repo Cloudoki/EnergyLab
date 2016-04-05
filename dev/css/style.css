@@ -66,6 +66,7 @@ html {
   height: 12%;
   bottom: 0;
   line-height: 65px;
+  z-index: 3;
 }
 .el-menu ul {
   height: 100%;

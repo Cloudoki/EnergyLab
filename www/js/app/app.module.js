@@ -5,12 +5,13 @@ angular
         'app.directives',
         'app.factory.data',
         'app.factory.utils',
+        'app.factory.detection',
         'app.components'
     ])
     .controller('AppCtrl', AppCtrl)
     .run(init);
 
-function AppCtrl($rootScope, $scope) {
+function AppCtrl($rootScope, $scope, factoryDetection) {
   $scope.onSwipeLeft = function() {
     $rootScope.$broadcast($rootScope.activeTrigger === 1 ? 'sodaOpen' : $rootScope.activeTrigger === 2 ? 'infoOpen' : '');
   };

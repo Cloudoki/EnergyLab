@@ -7,7 +7,7 @@ angular
   .controller('TriggeredSodaCtrl', TriggeredSodaCtrl)
 	.run(init);
 
-function MenuTopCtrl($rootScope, $scope, $element, factoryData, $timeout) {
+function MenuTopCtrl($rootScope, $scope, $element, factoryData, factoryDetection, $timeout) {
 
   var _interact = true,
       _active;
@@ -67,7 +67,7 @@ function MenuTopCtrl($rootScope, $scope, $element, factoryData, $timeout) {
   };
 
   $rootScope.$on('menuOpen', function (event) {
-    if ($rootScope.activeTrigger > 0) return;
+    if (factoryDetection.activeTrigger.index > 0) return;
     $scope.open();
   });
 
@@ -80,7 +80,7 @@ function MenuTopCtrl($rootScope, $scope, $element, factoryData, $timeout) {
   });
 }
 
-function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryUtils) {
+function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
 
   var _interact = true;
 
@@ -88,14 +88,14 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
     if (!_interact) return;
     _interact = false;
 
-    el = el || $($element).find('li').eq($rootScope.activeTrigger);
+    el = el || $($element).find('li').eq(factoryDetection.activeTrigger.index);
     $($element).find('li').removeClass('active');
     el.addClass('active');
-    $rootScope.activeTrigger = el.index();
+    factoryDetection.activeTrigger = {index: el.index()};
 
-    $rootScope.$broadcast($rootScope.activeTrigger > 0 ? 'menuClose' : 'menuOpen');
-    $rootScope.$broadcast($rootScope.activeTrigger == 1 ? 'sodaOpen' : 'sodaClose');
-    $rootScope.$broadcast($rootScope.activeTrigger == 0 ? 'svenOpen' : 'svenClose');
+    $rootScope.$broadcast(factoryDetection.activeTrigger.index > 0 ? 'menuClose' : 'menuOpen');
+    /*$rootScope.$broadcast(factoryDetection.activeTrigger.index == 1 ? 'sodaOpen' : 'sodaClose');
+    $rootScope.$broadcast(factoryDetection.activeTrigger.index == 0 ? 'svenOpen' : 'svenClose');*/
 
     $timeout(function() {
       _interact = true;
@@ -104,8 +104,6 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
 
   $scope.menus = factoryData.menus.bottom;
 
-  $rootScope.activeTrigger = Config.triggers.defaultActive || 0;
-
   $scope.click = function(e) {
     var el = $(e.currentTarget);
     if (el.hasClass('active')) return;
@@ -113,14 +111,14 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
   };
 
   $scope.onSwipeLeft = function() {
-    if ($rootScope.activeTrigger === 0) return;
-    $rootScope.activeTrigger--;
+    if (factoryDetection.activeTrigger.index === 0) return;
+    factoryDetection.activeTrigger.index--;
     activeTriggerTab();
   };
 
   $scope.onSwipeRight = function() {
-    if ($rootScope.activeTrigger === 2) return;
-    $rootScope.activeTrigger++;
+    if (factoryDetection.activeTrigger.index === 2) return;
+    factoryDetection.activeTrigger.index++;
     activeTriggerTab();
   };
 
@@ -146,7 +144,7 @@ function InfoCtrl($rootScope, $scope, $element, $timeout) {
   $scope.close();
 }
 
-function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils) {
+function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
 
   window.videos = [],
       interact = true;
@@ -258,13 +256,13 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
     resetVideos();
   };
 
-  $rootScope.$on('svenOpen', function () {
+  $rootScope.$on(factoryDetection.eventName + '0:true', function () {
     $timeout(function(){
       $scope.open();
     }, 100);
   });
 
-  $rootScope.$on('svenClose', function () {
+  $rootScope.$on(factoryDetection.eventName + '0:false', function () {
     $scope.close();
   });
 
@@ -276,7 +274,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryUtils)
   loadVideos();
 }
 
-function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData) {
+function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
 
   var anims = [];
 
@@ -294,7 +292,8 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData) 
   };
 
   $scope.open = function(e) {
-    $($element).css({'left' : '0px', 'opacity' : 1});
+    $scope.reset();
+    $($element).css({'left' : '0px', 'opacity' : 1, 'z-index' : 2});
   };
 
   $scope.anim = function() {
@@ -337,19 +336,21 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData) 
     });
   };
 
-  $rootScope
-    .$on('sodaOpen', function () {
-      $scope.open();
-      $timeout(function(){
-        $scope.anim();
-      }, 200);
-    });
-  $rootScope
-    .$on('sodaClose', function (event) {
-      $scope.close();
-      $scope.reset();
-    });
+  $rootScope.$on(factoryDetection.eventName + '1:true', function () {
+    $scope.open();
+    $timeout(function(){
+      $scope.anim();
+    }, 200);
+  });
+
+  $rootScope.$on(factoryDetection.eventName + '1:false', function (event) {
+    $scope.close();
+    $scope.reset();
+  });
+
+  $scope.close();
+  $scope.reset();
 }
 
-function init() {
+function init($rootScope) {
 }
