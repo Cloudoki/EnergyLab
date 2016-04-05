@@ -204,6 +204,10 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     $(videos[index])
       .off('play').on('play', function() {
       })
+      .off('canplay').on('canplay', function() {
+        console.log("PLAY ME NOW");
+        this.play();
+      })
       .off('ended').on('ended', function() {
         $rootScope.$broadcast('videoEnded');
 
@@ -223,9 +227,9 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     $timeout(function(){
       $(videos[index]).addClass('visible');
     }, 100);
-    $timeout(function(){
+    /*$timeout(function(){
       videos[index].play();
-    }, 500);
+    }, 500);*/
 
     /*$(videos[index]).one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
       function(e) {
@@ -272,8 +276,6 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
   });
 
   loadVideos();
-
-  $scope.close();
 }
 
 function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {

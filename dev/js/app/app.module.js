@@ -11,14 +11,17 @@ angular
     .controller('AppCtrl', AppCtrl)
     .run(init);
 
-function AppCtrl($rootScope, $scope, factoryDetection) {
+function AppCtrl($rootScope, $scope) {
   $scope.onSwipeLeft = function() {
     $rootScope.$broadcast($rootScope.activeTrigger === 1 ? 'sodaOpen' : $rootScope.activeTrigger === 2 ? 'infoOpen' : '');
   };
 }
 
-function init($ionicPlatform) {
+function init($ionicPlatform, factoryDetection) {
   $ionicPlatform.ready(function() {
+
+    factoryDetection.init();
+
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)

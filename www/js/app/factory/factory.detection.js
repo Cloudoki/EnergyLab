@@ -64,8 +64,6 @@ function factoryDetection($rootScope) {
     });
   }
 
-  init();
-
   return {
     set activeTrigger(data) {
       isNotDetecting();
@@ -88,6 +86,9 @@ function factoryDetection($rootScope) {
               pattern = 'Cubez.png';
             break;
       }
+
+      if (!_img) return;
+
       _img.src = 'img/patterns/' + pattern;
     },
     get activeTrigger() {
@@ -95,7 +96,8 @@ function factoryDetection($rootScope) {
     },
     get eventName() {
       return _eventName;
-    }
+    },
+    init: init
   };
 }
 
