@@ -64,8 +64,6 @@ function factoryDetection($rootScope) {
     });
   }
 
-  init();
-
   return {
     set activeTrigger(data) {
       isNotDetecting();
@@ -95,7 +93,8 @@ function factoryDetection($rootScope) {
     },
     get eventName() {
       return _eventName;
-    }
+    },
+    init: init
   };
 }
 
