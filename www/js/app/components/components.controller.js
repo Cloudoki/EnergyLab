@@ -187,7 +187,6 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
   function playVideo(index) {
 
     var el = $($element);
-
     el.show();
 
     $timeout(function(){
@@ -204,11 +203,24 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     $(videos[index])
       .off('play').on('play', function() {
       })
-      .off('canplay').on('canplay', function() {
+      .on('canplay', function() {
+		console.log("canplay - ", this);
         var vid = this;
-        $timeout(function(){
-          vid.play();
-        }, 500);
+		if(vid.paused || vid.ended) vid.play();
+      })
+      .on('canplaythrough', function() {
+	    console.log("canplaythrough - ", this);
+        var vid = this;
+        if(vid.paused || vid.ended) vid.play();
+      })
+      .on('loadedmetadata', function() {
+        console.log("loadedmetadata - ", this);
+        var vid = this;
+        var vidH = vid.videoHeight;
+        var vidW = vid.videoWidth;
+        vid.height = window.innerHeight;
+        vid.width = (vidW * vidH)/window.innerHeight;
+        if(vid.paused || vid.ended) vid.play();
       })
       .off('ended').on('ended', function() {
         $rootScope.$broadcast('videoEnded');
