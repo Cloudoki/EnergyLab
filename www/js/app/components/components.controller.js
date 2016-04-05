@@ -211,10 +211,10 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
       .off('play').on('play', function() {
       })
       .off('canplay').on('canplay', function() {
-        var vid = this;
+        /*var vid = this;
         $timeout(function(){
           vid.play();
-        });
+        });*/
       })
       .off('ended').on('ended', function() {
         $rootScope.$broadcast('videoEnded');
@@ -230,17 +230,19 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
         this.paused ? this.play() : this.pause();
       });
 
+    var interval = setInterval(function(){
+      console.log("--->", videos[index].paused);
+      if (videos[index].paused) {
+        videos[index].play();
+        clearInterval(interval);
+      }
+    }, 500);
+
     $($element).find('.vid-layer').append(videos[index]);
 
     $timeout(function(){
       $(videos[index]).addClass('visible');
     }, 100);
-  }
-
-  function draw(v,c,w,h) {
-    if(v.paused || v.ended) return false;
-    c.drawImage(v,0,0,w,h);
-    setTimeout(draw,20,v,c,w,h);
   }
 
   $scope.click = function() {

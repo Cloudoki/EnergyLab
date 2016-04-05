@@ -142,7 +142,7 @@ html {
   height: 100%;
   background: #f6f6f6 url(../img/logo-overlay.png) no-repeat 50% 96%;
   background-size: 50px;
-  z-index: 2;
+  z-index: 3;
   left: 0px;
   -webkit-box-shadow: inset 0px 0px 114px 10px rgba(0,0,0,0.1);
   -moz-box-shadow: inset 0px 0px 114px 10px rgba(0,0,0,0.1);

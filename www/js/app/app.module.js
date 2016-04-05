@@ -11,9 +11,10 @@ angular
     .controller('AppCtrl', AppCtrl)
     .run(init);
 
-function AppCtrl($rootScope, $scope) {
+function AppCtrl($rootScope, $scope, factoryDetection) {
   $scope.onSwipeLeft = function() {
-    $rootScope.$broadcast($rootScope.activeTrigger === 1 ? 'sodaOpen' : $rootScope.activeTrigger === 2 ? 'infoOpen' : '');
+    console.log("swipe_area");
+    $rootScope.$broadcast(factoryDetection.activeTrigger.index === 2 ? 'infoOpen' : '');
   };
 }
 
