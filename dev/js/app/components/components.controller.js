@@ -88,10 +88,14 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
     if (!_interact) return;
     _interact = false;
 
+    var setTrigger = !!el;
+
     el = el || $($element).find('li').eq(factoryDetection.activeTrigger.index);
     $($element).find('li').removeClass('active');
     el.addClass('active');
-    factoryDetection.activeTrigger = {index: el.index()};
+
+    if (setTrigger)
+      factoryDetection.activeTrigger = {index: el.index()};
 
     $rootScope.$broadcast(factoryDetection.activeTrigger.index > 0 ? 'menuClose' : 'menuOpen');
     /*$rootScope.$broadcast(factoryDetection.activeTrigger.index == 1 ? 'sodaOpen' : 'sodaClose');
@@ -112,12 +116,14 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
 
   $scope.onSwipeLeft = function() {
     if (factoryDetection.activeTrigger.index === 0) return;
+    factoryDetection.removeLastTrigger();
     factoryDetection.activeTrigger.index--;
     activeTriggerTab();
   };
 
   $scope.onSwipeRight = function() {
     if (factoryDetection.activeTrigger.index === 2) return;
+    factoryDetection.removeLastTrigger();
     factoryDetection.activeTrigger.index++;
     activeTriggerTab();
   };
@@ -208,7 +214,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
         var vid = this;
         $timeout(function(){
           vid.play();
-        }, 500);
+        });
       })
       .off('ended').on('ended', function() {
         $rootScope.$broadcast('videoEnded');
