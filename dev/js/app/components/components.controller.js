@@ -192,7 +192,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   function playVideo(index) {
 
-    var el = $($element);
+    var el = $($element), interval = true;
 
     el.show();
 
@@ -208,13 +208,21 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     index = index || 0;
 
     $(videos[index])
-      .off('play').on('play', function() {
+			.on('canplay', function() {
+        clearInterval(interval);
+				console.log("canplay - ", this);
+        var vid = this;
+				if(vid.paused || vid.ended) vid.play();
       })
-      .off('canplay').on('canplay', function() {
-        /*var vid = this;
-        $timeout(function(){
-          vid.play();
-        });*/
+      .on('loadedmetadata', function() {
+        clearInterval(interval);
+        console.log("loadedmetadata - ", this);
+        var vid = this;
+        var vidH = vid.videoHeight;
+        var vidW = vid.videoWidth;
+        vid.height = window.innerHeight;
+        vid.width = (vidW * vidH)/window.innerHeight;
+        if(vid.paused || vid.ended) vid.play();
       })
       .off('ended').on('ended', function() {
         $rootScope.$broadcast('videoEnded');
@@ -230,7 +238,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
         this.paused ? this.play() : this.pause();
       });
 
-    var interval = setInterval(function(){
+      interval = setInterval(function(){
       console.log("--->", videos[index].paused);
       if (videos[index].paused) {
         videos[index].play();
