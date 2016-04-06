@@ -61,6 +61,17 @@ function factoryDetection($rootScope) {
     });
   }
 
+  function toggleDetection(state) {
+
+    if (typeof ImageDetectionPlugin == 'undefined') {
+      console.log("ImageDetectionPlugin is not defined!");
+      return;
+    }
+
+    state = state || true;
+    ImageDetectionPlugin.startProcessing(state, function(success){console.log(success);}, function(error){console.log(error);});
+  }
+
   return {
     set activeTrigger(data) {
       isNotDetecting();
@@ -95,6 +106,7 @@ function factoryDetection($rootScope) {
       return _eventName;
     },
     init: init,
+    toggleDetection: toggleDetection,
     removeLastTrigger: isNotDetecting
   };
 }

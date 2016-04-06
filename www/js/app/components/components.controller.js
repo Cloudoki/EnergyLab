@@ -100,7 +100,7 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
     if (!_interact) return;
     _interact = false;
 
-    ImageDetectionPlugin.startProcessing(true, function(success){console.log(success);}, function(error){console.log(error);});
+    factoryDetection.toggleDetection();
 
     var setTrigger = !!el;
 
@@ -228,7 +228,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   $rootScope.$on(factoryDetection.eventName + '0:true', function () {
 
-    ImageDetectionPlugin.startProcessing(false, function(success){console.log(success);}, function(error){console.log(error);});
+    factoryDetection.toggleDetection(false);
 
     $timeout(function(){
       $scope.open();
@@ -256,7 +256,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     })
     .off('ended').on('ended', function() {
 
-      ImageDetectionPlugin.startProcessing(true, function(success){console.log(success);}, function(error){console.log(error);});
+      factoryDetection.toggleDetection();
 
       $rootScope.$broadcast('videoEnded');
 
