@@ -63,7 +63,7 @@ function factoryDetection($rootScope) {
 
   function toggleDetection(state) {
 
-    if (typeof ImageDetectionPlugin == 'undefined') {
+    if (typeof ImageDetectionPlugin == 'undefined' || ImageDetectionPlugin.startProcessing == undefined) {
       console.log("ImageDetectionPlugin is not defined!");
       return;
     }
