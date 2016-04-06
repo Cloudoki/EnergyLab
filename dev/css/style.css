@@ -408,8 +408,6 @@ html {
 .visible {
   opacity: 1 !important;
 }
-body {
-  background: #000;}
 /* IPHONE 4 */
 @media only screen and (max-height : 480px) {
   .triggered-soda .information {
