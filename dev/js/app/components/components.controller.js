@@ -100,6 +100,8 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
     if (!_interact) return;
     _interact = false;
 
+    ImageDetectionPlugin.startProcessing(true, function(success){console.log(success);}, function(error){console.log(error);});
+
     var setTrigger = !!el;
 
     el = el || $($element).find('li').eq(factoryDetection.activeTrigger.index);
@@ -225,6 +227,9 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
   };
 
   $rootScope.$on(factoryDetection.eventName + '0:true', function () {
+
+    ImageDetectionPlugin.startProcessing(false, function(success){console.log(success);}, function(error){console.log(error);});
+
     $timeout(function(){
       $scope.open();
     }, 100);
@@ -243,11 +248,25 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   $scope.close();
 
-  $('#sven-video').on('timeupdate', function(){
-    if (this.currentTime > active.trigger && !!active.trigger) {
-      $rootScope.$broadcast('topMenuOpen');
-    }
-  });
+  $('#sven-video')
+    .on('timeupdate', function(){
+      if (this.currentTime > active.trigger && !!active.trigger) {
+        $rootScope.$broadcast('topMenuOpen');
+      }
+    })
+    .off('ended').on('ended', function() {
+
+      ImageDetectionPlugin.startProcessing(true, function(success){console.log(success);}, function(error){console.log(error);});
+
+      $rootScope.$broadcast('videoEnded');
+
+      $('#sven-video')
+        .removeClass('visible')
+        .one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
+          function(e) {
+            $scope.close();
+          });
+      });
 }
 
 function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
