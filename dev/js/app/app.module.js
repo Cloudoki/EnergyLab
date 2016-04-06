@@ -2,6 +2,7 @@
 angular
     .module('energyLab', [
         'ionic',
+        'app.filters',
         'app.directives',
         'app.factory.data',
         'app.factory.utils',

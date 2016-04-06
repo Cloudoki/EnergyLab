@@ -17,13 +17,14 @@ var Config = {
       sven: {
         transition: 300, // miliseconds
         videos: [
-          'img/Composition067.mp4',
-          'img/Composition075.mp4',
-          'img/Composition076.mp4',
-          'img/Composition081.mp4'
+          {id:1, url:'img/Composition067.mp4', trigger:20},
+          {id:2, url:'img/Composition075.mp4'},
+          {id:3, url:'img/Composition076.mp4'},
+          {id:4, url:'img/Composition081.mp4'}
         ]
       },
       soda: {
+        backgroundColor: 'rgba(163, 198, 23, 0.4)',
         sugarCubes: {
           container: {
             left: 0,

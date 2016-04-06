@@ -123,7 +123,7 @@ function elSodaInfo($timeout) {
     link: function (scope, element, attrs) {
     },
     replace: true,
-    template: '<div class="info-panel"><span class="name">{{data.name}}</span><span class="value">{{data.value}}</span></div>'
+    template: '<div class="info-panel"><span class="name">{{data.name}}</span><span class="value {{last($last)}}">{{data.value}}</span></div>'
   }
 }
 

@@ -10,10 +10,11 @@ angular
 function MenuTopCtrl($rootScope, $scope, $element, factoryData, factoryDetection, $timeout) {
 
   var _interact = true,
+      _toggleOpen,
       _active;
 
   function reset() {
-    _active = null;
+    _active = _toggleOpen = null;
     $($element).find('li').removeClass('active');
   }
 
@@ -58,6 +59,13 @@ function MenuTopCtrl($rootScope, $scope, $element, factoryData, factoryDetection
     mb.hasClass('closed') ? mb.removeClass('closed') : mb.addClass('closed');
   };
 
+  $scope.toggleOpen = function() {
+    if (_toggleOpen) return;
+    _toggleOpen = true;
+    $($element).find('.el-menu.top').removeClass('closed');
+    $($element).find('.el-menu-open').addClass('closed');
+  };
+
   $scope.onSwipeUp = function() {
     $scope.toggle();
   };
@@ -77,6 +85,10 @@ function MenuTopCtrl($rootScope, $scope, $element, factoryData, factoryDetection
 
   $rootScope.$on('videoEnded', function (event) {
     reset();
+  });
+
+  $rootScope.$on('topMenuOpen', function (event) {
+    $scope.toggleOpen();
   });
 }
 
@@ -153,12 +165,14 @@ function InfoCtrl($rootScope, $scope, $element, $timeout) {
 function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
 
   window.videos = [];
+  var active;
 
   function resetVideo() {
     $('#sven-video').attr('src', '');
     var el = $($element);
     el.find('.mid-layer').addClass('hidden');
     el.find('.vid-layer').addClass('hidden');
+    active = null;
   }
 
   function loadVideos() {
@@ -185,7 +199,8 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
     index = index || 0;
 
-    $('#sven-video').attr('src', videos[index]);
+    active = videos[index];
+    $('#sven-video').attr('src', active.url);
 
     $timeout(function(){
       $('#sven-video').addClass('visible');
@@ -227,9 +242,17 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
   loadVideos();
 
   $scope.close();
+
+  $('#sven-video').on('timeupdate', function(){
+    if (this.currentTime > active.trigger && !!active.trigger) {
+      $rootScope.$broadcast('topMenuOpen');
+    }
+  });
 }
 
 function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
+
+  $($element).find('.container').css({'background-color' : Config.triggers.soda.backgroundColor});
 
   var anims = [];
 
@@ -241,6 +264,10 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
   }
 
   $scope.info = factoryData.info.soda;
+
+  $scope.last = function(last) {
+    return last ? 'bold' : '';
+  };
 
   $scope.close = function(e) {
     $($element).css({'left' : $($element).width() + 'px', 'opacity' : 0});

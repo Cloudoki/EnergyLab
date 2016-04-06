@@ -103,11 +103,13 @@ html {
   color: #fff;
   font-weight: 600;
   font-size: 16px;
+  font-family: SourceSansProSemibold;
   text-transform: capitalize;
   padding: 10px;
   cursor: default;
   -webkit-transition: all ease-in-out 300ms;
   transition: all ease-in-out 300ms;
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
 }
 .el-menu.bottom li > div.el-menu-image {
   color: #000;
@@ -115,7 +117,7 @@ html {
   cursor: default;
   height: inherit;
   background-size: contain !important;
-  opacity: .5;
+  opacity: .6;
 }
 .el-menu.bottom li > div.el-menu-selected {
   background: #fff;
@@ -250,7 +252,8 @@ html {
   transition: all ease-in-out .2s;
 }
 .triggered-soda .container {
-  background: rgba(0, 136, 176, 0.4); /*  url(../img/sugar-cubes-dummy.png) no-repeat 10% */
+  /*background: rgba(0, 136, 176, 0.4);*/
+  /*background: rgba(163, 198, 23, 0.4);*/
   background-size: contain;
   z-index: 2;
   position: absolute;
@@ -286,12 +289,17 @@ html {
   color: #fff;
 }
 .triggered-soda .information span.name {
-  font-size: 16px;
+  font-size: 12px;
   text-transform: uppercase;
   opacity: .5;
+  font-family: SourceSansProSemibold;
 }
 .triggered-soda .information span.value {
-  font-size: 20px;
+  font-size: 30px;
+  font-family: SourceSansProExtraLight;
+}
+.triggered-soda .information span.value.bold {
+  font-family: SourceSansProBold;
 }
 .triggered-soda .content {
   height: 88%;
@@ -406,3 +414,34 @@ html {
     top: 0;
   }
 }
+
+/* FONTS */
+@font-face {
+  font-family: 'SourceSansProBold';
+  src: url('../fonts/SourceSansProBold.eot');
+  src: url('../fonts/SourceSansProBold.eot') format('embedded-opentype'),
+  url('../fonts/SourceSansProBold.woff2') format('woff2'),
+  url('../fonts/SourceSansProBold.woff') format('woff'),
+  url('../fonts/SourceSansProBold.ttf') format('truetype'),
+  url('../fonts/SourceSansProBold.svg#SourceSansProBold') format('svg');
+}
+@font-face {
+  font-family: 'SourceSansProExtraLight';
+  src: url('../fonts/SourceSansProExtraLight.eot');
+  src: url('../fonts/SourceSansProExtraLight.eot') format('embedded-opentype'),
+  url('../fonts/SourceSansProExtraLight.woff2') format('woff2'),
+  url('../fonts/SourceSansProExtraLight.woff') format('woff'),
+  url('../fonts/SourceSansProExtraLight.ttf') format('truetype'),
+  url('../fonts/SourceSansProExtraLight.svg#SourceSansProExtraLight') format('svg');
+}
+@font-face {
+  font-family: 'SourceSansProSemibold';
+  src: url('../fonts/SourceSansProSemibold.eot');
+  src: url('../fonts/SourceSansProSemibold.eot') format('embedded-opentype'),
+  url('../fonts/SourceSansProSemibold.woff2') format('woff2'),
+  url('../fonts/SourceSansProSemibold.woff') format('woff'),
+  url('../fonts/SourceSansProSemibold.ttf') format('truetype'),
+  url('../fonts/SourceSansProSemibold.svg#SourceSansProSemibold') format('svg');
+}
+
+
