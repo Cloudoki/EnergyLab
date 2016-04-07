@@ -76,7 +76,7 @@ function factoryDetection($rootScope) {
       console.log("ImageDetectionPlugin is not defined!");
       return;
     }
-    
+
     ImageDetectionPlugin.setDetectionTimeout(t, function(success){console.log(success);}, function(error){console.log(error);});
   }
 
