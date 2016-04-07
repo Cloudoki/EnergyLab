@@ -100,7 +100,7 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
     if (!_interact) return;
     _interact = false;
 
-    factoryDetection.toggleDetection();
+    factoryDetection.toggleDetection(true);
 
     var setTrigger = !!el;
 
@@ -256,7 +256,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     })
     .off('ended').on('ended', function() {
 
-      factoryDetection.toggleDetection();
+      factoryDetection.toggleDetection(true);
 
       $rootScope.$broadcast('videoEnded');
 
@@ -338,6 +338,7 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
   };
 
   $rootScope.$on(factoryDetection.eventName + '1:true', function () {
+    factoryDetection.detectionTimeout(2);
     $scope.open();
     $timeout(function(){
       $scope.anim();

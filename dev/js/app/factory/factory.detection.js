@@ -68,8 +68,16 @@ function factoryDetection($rootScope) {
       return;
     }
 
-    state = state || true;
     ImageDetectionPlugin.startProcessing(state, function(success){console.log(success);}, function(error){console.log(error);});
+  }
+
+  function detectionTimeout(t) {
+    if (typeof ImageDetectionPlugin == 'undefined' || ImageDetectionPlugin.startProcessing == undefined) {
+      console.log("ImageDetectionPlugin is not defined!");
+      return;
+    }
+    
+    ImageDetectionPlugin.setDetectionTimeout(t, function(success){console.log(success);}, function(error){console.log(error);});
   }
 
   return {
@@ -107,6 +115,7 @@ function factoryDetection($rootScope) {
     },
     init: init,
     toggleDetection: toggleDetection,
+    detectionTimeout: detectionTimeout,
     removeLastTrigger: isNotDetecting
   };
 }
