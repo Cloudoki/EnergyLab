@@ -199,7 +199,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
   var active;
 
   function toggleControls(visible) {
-    visible ? $($element).find('.controls').fadeIn(200) : $($element).find('.controls').fadeOut(50);
+    visible ? $($element).find('.play').fadeIn(200) : $($element).find('.play').fadeOut(50);
     //$($element).find('.controls').
   }
 
@@ -309,9 +309,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
       }
     })
     .off('play').on('play', function() {
-      $timeout(function(){
-        toggleControls(false);
-      }, 200);
+      toggleControls(false);
       $rootScope.$broadcast('videoStarted', active);
     })
     .off('pause').on('pause', function() {

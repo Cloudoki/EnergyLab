@@ -232,7 +232,6 @@ html {
   width: 100%;
   bottom: 0;
   z-index: 1;
-  display: none;
 }
 .triggered-sven .vid-layer .controls .play {
   background: rgba(0, 0, 0, 0.5);
@@ -245,6 +244,7 @@ html {
   left: 0;
   right: 0;
   margin: auto;
+  display: none;
 }
 .triggered-sven .vid-layer .controls .play > div {
   width: 0;
