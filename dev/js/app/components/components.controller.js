@@ -254,6 +254,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   $scope.togglePause = function() {
     togglePause();
+    return false;
   };
 
   $scope.open = function () {
