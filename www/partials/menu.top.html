@@ -1,7 +1,7 @@
 <div ng-controller="MenuTopCtrl">
 <div class="el-menu top closed" on-swipe-up="onSwipeUp()">
   <ul>
-    <li ng-repeat="menu in menus" data-menu-index="{{$index}}" data-menu-name="{{menu.name.serialize()}}" ng-click="click($event)">
+    <li ng-repeat="menu in menus" data-menu-index="{{$index+1}}" data-menu-name="{{menu.name.serialize()}}" ng-click="click($event)">
       <div>{{menu.name}}</div>
     </li>
   </ul>

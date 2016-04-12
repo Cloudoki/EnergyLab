@@ -17,7 +17,7 @@ var Config = {
       sven: {
         transition: 300, // miliseconds
         videos: [
-          {id:1, url:'img/Composition067.mp4', trigger:20},
+          {id:1, url:'img/Composition067.mp4', trigger:25},
           {id:2, url:'img/Composition075.mp4'},
           {id:3, url:'img/Composition076.mp4'},
           {id:4, url:'img/Composition081.mp4'}

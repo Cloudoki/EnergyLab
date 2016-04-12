@@ -83,22 +83,27 @@ function MenuTopCtrl($rootScope, $scope, $element, factoryData, factoryDetection
     $scope.close();
   });
 
-  $rootScope.$on('videoEnded', function (event) {
-    reset();
-  });
-
   $rootScope.$on('topMenuOpen', function (event) {
     $scope.toggleOpen();
+  });
+
+  $rootScope.$on('topMenuReset', function (event) {
+    $scope.toggle();
+    reset();
   });
 }
 
 function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
 
-  var _interact = true;
+  var _interact = true,
+      _active,
+      _lastVideo;
 
   function activeTriggerTab(el) {
     if (!_interact) return;
     _interact = false;
+
+    activeTriggerStatus(false);
 
     factoryDetection.toggleDetection(true);
 
@@ -112,18 +117,27 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
       factoryDetection.activeTrigger = {index: el.index()};
 
     $rootScope.$broadcast(factoryDetection.activeTrigger.index > 0 ? 'menuClose' : 'menuOpen');
-    /*$rootScope.$broadcast(factoryDetection.activeTrigger.index == 1 ? 'sodaOpen' : 'sodaClose');
-    $rootScope.$broadcast(factoryDetection.activeTrigger.index == 0 ? 'svenOpen' : 'svenClose');*/
 
     $timeout(function() {
       _interact = true;
     }, 500);
   }
 
+  function activeTriggerStatus(status) {
+    if (!_active) return;
+    var el = _active.find('.el-menu-selected');
+    status ? el.addClass('active') : el.removeClass('active');
+  }
+
   $scope.menus = factoryData.menus.bottom;
 
   $scope.click = function(e) {
-    var el = $(e.currentTarget);
+    var el = _active = $(e.currentTarget);
+    if (el.data('menuIndex') == 0 && _lastVideo) {
+      $rootScope.$broadcast('videoClose');
+      $rootScope.$broadcast('topMenuReset');
+      return;
+    }
     if (el.hasClass('active')) return;
     activeTriggerTab(el);
   };
@@ -143,6 +157,19 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
   };
 
   $timeout(function(){activeTriggerTab()});
+
+  $rootScope.$on('videoStarted', function (event, active) {
+    _lastVideo = active;
+    activeTriggerStatus(true);
+  });
+
+  $rootScope.$on('videoEnded', function (event) {
+    _lastVideo = null;
+  });
+
+  $rootScope.$on('videoClose', function (event) {
+    activeTriggerStatus(false);
+  });
 }
 
 function InfoCtrl($rootScope, $scope, $element, $timeout) {
@@ -169,7 +196,13 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
   window.videos = [];
   var active;
 
+  function toggleControls(visible) {
+    visible ? $($element).find('.controls').fadeIn(200) : $($element).find('.controls').fadeOut(50);
+    //$($element).find('.controls').
+  }
+
   function resetVideo() {
+    $rootScope.$broadcast('videoEnded');
     $('#sven-video').attr('src', '');
     var el = $($element);
     el.find('.mid-layer').addClass('hidden');
@@ -184,7 +217,15 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     });
   }
 
+  function togglePause() {
+    active.firstTime = false;
+    var v = $($element).find('video').get(0);
+    v.paused ? v.play() : v.pause();
+  }
+
   function playVideo(index) {
+
+    factoryDetection.toggleDetection(false);
 
     resetVideo();
 
@@ -202,6 +243,8 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     index = index || 0;
 
     active = videos[index];
+    active.menuIndex = index;
+    active.firstTime = true;
     $('#sven-video').attr('src', active.url);
 
     $timeout(function(){
@@ -209,9 +252,8 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     }, 100);
   }
 
-  $scope.click = function() {
-    var v = $($element).find('video').get(0);
-    v.paused ? v.play() : v.pause();
+  $scope.togglePause = function() {
+    togglePause();
   };
 
   $scope.open = function () {
@@ -219,6 +261,9 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
   };
 
   $scope.close = function () {
+
+    factoryDetection.toggleDetection(true);
+
     $($element)
       .hide()
       .find('.mid-layer, .vid-layer').addClass('hidden');
@@ -228,7 +273,9 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   $rootScope.$on(factoryDetection.eventName + '0:true', function () {
 
-    factoryDetection.toggleDetection(false);
+    $rootScope.$broadcast('videoEnded');
+
+    //factoryDetection.toggleDetection(false);
 
     $timeout(function(){
       $scope.open();
@@ -239,9 +286,13 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     $scope.close();
   });
 
+  $rootScope.$on('videoClose', function () {
+    $scope.close();
+  });
+
   $scope.$on('playVideo', function (e, index) {
-    console.log("PLAY_VIDEO", index+1);
-    playVideo(index + 1)
+    console.log("PLAY_VIDEO", index);
+    playVideo(index);
   });
 
   loadVideos();
@@ -250,23 +301,23 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   $('#sven-video')
     .on('timeupdate', function(){
+      if (!active) return;
       if (this.currentTime > active.trigger && !!active.trigger) {
         $rootScope.$broadcast('topMenuOpen');
       }
     })
+    .off('play').on('play', function() {
+      toggleControls(false);
+      $rootScope.$broadcast('videoStarted', active);
+    })
+    .off('pause').on('pause', function() {
+      toggleControls(true);
+    })
     .off('ended').on('ended', function() {
 
-      factoryDetection.toggleDetection(true);
-
-      $rootScope.$broadcast('videoEnded');
-
-      $('#sven-video')
-        .removeClass('visible')
-        .one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
-          function(e) {
-            $scope.close();
-          });
-      });
+      //factoryDetection.toggleDetection(true);
+      //$rootScope.$broadcast('videoEnded');
+    });
 }
 
 function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {

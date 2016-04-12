@@ -1,6 +1,9 @@
 <div class="triggered-sven" ng-controller="TriggeredSvenCtrl">
   <div class="mid-layer"></div>
   <div class="vid-layer">
-    <video id="sven-video" poster="img/white-bg.png" autoplay src="" ng-click="click()" webkit-playsinline></video>
+    <div class="controls" ng-click="togglePause()">
+      <div class="play"><div></div></div>
+    </div>
+    <video id="sven-video" poster="img/white-bg.png" autoplay src="" ng-click="togglePause()" webkit-playsinline></video>
   </div>
 </div>

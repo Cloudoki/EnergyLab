@@ -14,16 +14,19 @@ function factoryDetection($rootScope) {
   var _img,
       _eventName = 'trigger:',
       _activeTrigger = {index: Config.triggers.defaultActive || 0, active: true, detected: false},
-      _lastTrigger;
+      _lastTrigger,
+      _detecting = false;
 
   function isDetecting() {
-    console.log(_eventName + _activeTrigger.index + ':true');
-    $rootScope.$broadcast(_eventName + _activeTrigger.index + ':true');
+    _detecting = true;
+    console.log(_eventName + _activeTrigger.index + ':' + _detecting);
+    $rootScope.$broadcast(_eventName + _activeTrigger.index + ':' + _detecting);
   }
 
   function isNotDetecting() {
-    console.log(_eventName + _activeTrigger.index + ':false');
-    $rootScope.$broadcast(_eventName + _activeTrigger.index + ':false');
+    _detecting = false;
+    console.log(_eventName + _activeTrigger.index + ':' + _detecting);
+    $rootScope.$broadcast(_eventName + _activeTrigger.index + ':' + _detecting);
   }
 
 
@@ -62,6 +65,8 @@ function factoryDetection($rootScope) {
   }
 
   function toggleDetection(state) {
+
+    console.log("toggleDetection->", state);
 
     if (typeof ImageDetectionPlugin == 'undefined' || ImageDetectionPlugin.startProcessing == undefined) {
       console.log("ImageDetectionPlugin is not defined!");
@@ -112,6 +117,9 @@ function factoryDetection($rootScope) {
     },
     get eventName() {
       return _eventName;
+    },
+    get detecting() {
+      return _detecting;
     },
     init: init,
     toggleDetection: toggleDetection,
