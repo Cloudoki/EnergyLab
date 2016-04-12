@@ -88,7 +88,9 @@ function MenuTopCtrl($rootScope, $scope, $element, factoryData, factoryDetection
   });
 
   $rootScope.$on('topMenuReset', function (event) {
-    $scope.toggle();
+    if (!$($element).find('.el-menu').hasClass('closed'))
+      $scope.toggle();
+
     reset();
   });
 }
@@ -252,9 +254,8 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     }, 100);
   }
 
-  $scope.togglePause = function() {
+  $scope.togglePause = function(e) {
     togglePause();
-    return false;
   };
 
   $scope.open = function () {
@@ -308,7 +309,9 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
       }
     })
     .off('play').on('play', function() {
-      toggleControls(false);
+      $timeout(function(){
+        toggleControls(false);
+      }, 200);
       $rootScope.$broadcast('videoStarted', active);
     })
     .off('pause').on('pause', function() {
@@ -350,12 +353,16 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
   };
 
   $scope.anim = function() {
+
+    window.cubes = [];
+
     var index=4;
     $.each($('.soda-sugar-cube'), function(i, el) {
       index++;
       anims.push($timeout(function(){
         $(el).removeClass('drop');
       }, i * Config.triggers.soda.sugarCubes.anim.interval));
+      window.cubes.push(el);
     });
 
     $.each($('.info-panel'), function(i, el) {
