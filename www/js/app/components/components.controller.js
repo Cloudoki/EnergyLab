@@ -196,7 +196,8 @@ function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
 
   $scope.services = function(e) {
     var el = $(e.currentTarget);
-    window.open(el.data('url'));
+    window.open = typeof cordova != "undefined" ? cordova.InAppBrowser.open : window.open;
+    window.open(el.data('url'), '_system', 'location=no');
   };
 
   $rootScope.$on('infoOpen', function () {
