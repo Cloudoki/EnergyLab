@@ -21,6 +21,7 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "../ImageDetectionPlugin",
+    "cordova-plugin-inappbrowser",
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
