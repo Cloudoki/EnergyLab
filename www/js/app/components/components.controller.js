@@ -175,8 +175,18 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
 }
 
 function InfoCtrl($rootScope, $scope, $element, $timeout) {
+
+  $(window).on('resize', function(e){
+    $($element).css('left', $(e.currentTarget).width());
+  });
+
+  $scope.open = function(e) {
+    $($element).css({'left' : '0px', 'opacity' : 1});
+  };
+
   $scope.close = function(e) {
-    $($element).css({'left' : $($element).width() + 'px', 'opacity' : 0});
+    $($element).find('.content').scrollTop(0);
+    $($element).css({'left' : $($element).width() + 'px', 'opacity' : 1});
     $timeout(function(){
       $($element).addClass('animated');
     });
@@ -187,10 +197,18 @@ function InfoCtrl($rootScope, $scope, $element, $timeout) {
   };
 
   $rootScope.$on('infoOpen', function () {
-    $($element).css({'left' : '0px', 'opacity' : 1});
+    $scope.open();
   });
 
   $scope.close();
+
+  $rootScope.$on('toggleInfo', function (e, status) {
+    var close = function() {
+      $scope.close();
+      $($element).hide()
+    };
+    status ? $($element).show() : close();
+  });
 }
 
 function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
@@ -227,6 +245,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   function playVideo(index) {
 
+    $rootScope.$broadcast('toggleInfo', false);
     factoryDetection.toggleDetection(false);
 
     resetVideo();
@@ -264,6 +283,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   $scope.close = function () {
 
+    $rootScope.$broadcast('toggleInfo', true);
     factoryDetection.toggleDetection(true);
 
     $($element)
@@ -342,26 +362,40 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
   };
 
   $scope.close = function(e) {
+    $rootScope.$broadcast('toggleInfo', true);
     $($element).css({'left' : $($element).width() + 'px', 'opacity' : 0});
   };
 
   $scope.open = function(e) {
+    $rootScope.$broadcast('toggleInfo', false);
     $scope.reset();
     $($element).css({'left' : '0px', 'opacity' : 1, 'z-index' : 2});
   };
 
   $scope.anim = function() {
 
-    window.cubes = [];
+    var index= 4,
+        ssc = $('.soda-sugar-cube');
 
-    var index=4;
-    $.each($('.soda-sugar-cube'), function(i, el) {
+    $.each(ssc, function(i, el) {
       index++;
       anims.push($timeout(function(){
         $(el).removeClass('drop');
       }, i * Config.triggers.soda.sugarCubes.anim.interval));
-      window.cubes.push(el);
     });
+
+    ssc.last().one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',
+      function() {
+        var line = $('.line');
+
+        line.first()
+          .css('top', Math.round($('.container img:nth-child(5)').offset().top + 2) + 'px')
+          .addClass('active');
+
+        line.last()
+          .css('top', Math.round($('.container img:nth-child(6)').offset().top - 5) + 'px')
+          .addClass('active');
+      });
 
     $.each($('.info-panel'), function(i, el) {
       anims.push($timeout(function(){
@@ -377,6 +411,8 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
   $scope.reset = function() {
 
     $($element).find('.content').removeClass('shadow');
+
+    $('.line').removeClass('active');
 
     $('.soda-sugar-cube')
       .removeClass('animated')
