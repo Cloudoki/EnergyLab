@@ -174,17 +174,19 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
   });
 }
 
-function InfoCtrl($rootScope, $scope, $element, $timeout) {
+function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
 
   $(window).on('resize', function(e){
     $($element).css('left', $(e.currentTarget).width());
   });
 
   $scope.open = function(e) {
+    factoryDetection.toggleDetection(false);
     $($element).css({'left' : '0px', 'opacity' : 1});
   };
 
   $scope.close = function(e) {
+    factoryDetection.toggleDetection(true);
     $($element).find('.content').scrollTop(0);
     $($element).css({'left' : $($element).width() + 'px', 'opacity' : 1});
     $timeout(function(){
@@ -193,7 +195,8 @@ function InfoCtrl($rootScope, $scope, $element, $timeout) {
   };
 
   $scope.services = function(e) {
-    console.log('TODO:// add code for services here ..');
+    var el = $(e.currentTarget);
+    window.open(el.data('url'));
   };
 
   $rootScope.$on('infoOpen', function () {

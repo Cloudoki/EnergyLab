@@ -110,14 +110,6 @@ function factoryUtils($http, $q) {
             }
 
             return ret;
-
-            /*setTimeout(function() {
-                if (okToGreet(name)) {
-                    resolve('Hello, ' + name + '!');
-                } else {
-                    reject('Greeting ' + name + ' is not allowed.');
-                }
-            }, 1000);*/
         });
     }
 
