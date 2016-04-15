@@ -7,7 +7,6 @@ module.exports = function(done) {
   gulp.src(PATHS.sass)
     .pipe(sass())
     .on('error', sass.logError)
-    .pipe(gulp.dest(ENV_MODE.dest + '/css'))
     .pipe(minifyCss({
       keepSpecialComments: 0
     }))
