@@ -4,9 +4,7 @@ angular
 
 function factoryDetection($rootScope) {
 
-  console.log('factoryDetection begin ..');
-
-  // temp
+  // TODO - remove this line
   window.detectingTrigger = function(val) {
     return val ? isDetecting() : isNotDetecting();
   };
@@ -29,6 +27,33 @@ function factoryDetection($rootScope) {
     $rootScope.$broadcast(_eventName + _activeTrigger.index + ':' + _detecting);
   }
 
+  function activeTrigger(data) {
+    isNotDetecting();
+    _lastTrigger = _activeTrigger = {
+      index: data.index,
+      active: true,
+      detected: false
+    };
+
+    var pattern;
+
+    switch(data.index) {
+      case 0:
+        pattern = 'sven.jpg';
+        break;
+      case 1:
+        pattern = 'coke.jpg';
+        break;
+      case 2:
+        pattern = 'red_bull_trigger.jpg';
+        break;
+    }
+
+    if (!_img) return;
+
+    _img.src = 'img/patterns/' + pattern;
+    console.log("trigger (" + pattern + ") selected");
+  }
 
   function init() {
 
@@ -57,16 +82,18 @@ function factoryDetection($rootScope) {
     }, function(error){
       isNotDetecting();
     });
+
+    activeTrigger(_lastTrigger);
   }
 
   function toggleDetection(state) {
-
-    console.log("toggleDetection->", state);
 
     if (typeof ImageDetectionPlugin == 'undefined' || ImageDetectionPlugin.startProcessing == undefined) {
       console.log("ImageDetectionPlugin is not defined!");
       return;
     }
+
+    console.log("toggleDetection->", state);
 
     ImageDetectionPlugin.startProcessing(state, function(success){console.log(success);}, function(error){console.log(error);});
   }
@@ -82,30 +109,7 @@ function factoryDetection($rootScope) {
 
   return {
     set activeTrigger(data) {
-      isNotDetecting();
-      _lastTrigger = _activeTrigger = {
-        index: data.index,
-        active: true,
-        detected: false
-      };
-
-      var pattern;
-
-      switch(data.index) {
-          case 0:
-              pattern = 'sven.jpg';
-              break;
-          case 1:
-              pattern = 'coke.jpg';
-              break;
-          case 2:
-              pattern = 'red_bull_trigger.jpg';
-            break;
-      }
-
-      if (!_img) return;
-
-      _img.src = 'img/patterns/' + pattern;
+      activeTrigger(data);
     },
     get activeTrigger() {
       return _activeTrigger;
