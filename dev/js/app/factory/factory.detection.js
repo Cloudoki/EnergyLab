@@ -50,12 +50,7 @@ function factoryDetection($rootScope) {
       canvas = null;
     };
 
-    if (typeof ImageDetectionPlugin == 'undefined') {
-      //clearInterval(interval);
-      //console.log("ImageDetectionPlugin is not defined!");
-      console.log('current:', _activeTrigger);
-      return;
-    }
+    if (typeof ImageDetectionPlugin == 'undefined') return;
 
     ImageDetectionPlugin.isDetecting(function(success){
       isDetecting();

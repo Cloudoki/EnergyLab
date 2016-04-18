@@ -3,7 +3,7 @@
   <div class="information">
     <el-soda-info ng-repeat="data in info"></el-soda-info>
   </div>
-  <div class="content">
+  <div class="content" data-sugar-cubes="{{info | sugarCubes}}">
     <el-soda-sugar-cube></el-soda-sugar-cube>
     <el-soda-sugar-cube></el-soda-sugar-cube>
     <el-soda-sugar-cube></el-soda-sugar-cube>

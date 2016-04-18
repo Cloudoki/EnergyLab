@@ -30,8 +30,8 @@
       },
       {
         "id": 3,
-        "name": "box",
-        "image": "box.png"
+        "name": "redbull",
+        "image": "redbull.png"
       }
     ]
   },
@@ -41,7 +41,7 @@
       "id": "01",
       "type": 1,
       "action": 1,
-      "url": "https://www.youtube.com/watch?v=LgwZdoXiPxo"
+      "url": ""
     },
     {
       "name": "Coke",
@@ -51,19 +51,25 @@
       "url": ""
     },
     {
-      "name": "Cubes",
+      "name": "Redbull",
       "id": "03",
-      "type": 1,
-      "action": 1,
-      "url": "https://www.youtube.com/watch?v=LgwZdoXiPxo"
+      "type": 3,
+      "action": 3,
+      "url": ""
     }
   ],
   "info": {
     "soda": [
-      {"name": "VOEDINGSMIDDEL", "value": "Coca-Cola"},
-      {"name": "PORTIE", "value": "500ml"},
-      {"name": "KCAL", "value": "210"},
-      {"name": "KLONTJES SUIKER", "value": "9"}
+      {"name": "VOEDINGSMIDDEL", "value": "Coca-Cola", "key": "foodName"},
+      {"name": "PORTIE", "value": "500ml", "key": "foodPortion"},
+      {"name": "KCAL", "value": "210", "key": "foodKcal"},
+      {"name": "KLONTJES SUIKER", "value": "9", "key": "foodSugarCubes"}
+    ],
+    "redbull": [
+      {"name": "VOEDINGSMIDDEL", "value": "Red Bull", "key": "foodName"},
+      {"name": "PORTIE", "value": "250ml", "key": "foodPortion"},
+      {"name": "KCAL", "value": "225", "key": "foodKcal"},
+      {"name": "KLONTJES SUIKER", "value": "5", "key": "foodSugarCubes"}
     ]
   }
 }

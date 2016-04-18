@@ -1,12 +1,12 @@
 angular
     .module('app.filters', [])
     .run(init)
-    .filter('name', name);
+    .filter('sugarCubes', sugarCubes);
 
-function name() {
-    return function(input) {
-        return input.split('|')[0];
-    };
+function sugarCubes() {
+  return function(input) {
+    return _.find(input, { 'key': 'foodSugarCubes'}).value;
+  };
 }
 
 function init() {

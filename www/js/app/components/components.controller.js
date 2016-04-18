@@ -109,14 +109,14 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
 
     factoryDetection.toggleDetection(true);
 
-    var setTrigger = !!el;
+    //var setTrigger = !!el;
 
-    el = el || $($element).find('li').eq(factoryDetection.activeTrigger.index);
+    _active = el = el || $($element).find('li').eq(factoryDetection.activeTrigger.index);
     $($element).find('li').removeClass('active');
     el.addClass('active');
 
-    if (setTrigger)
-      factoryDetection.activeTrigger = {index: el.index()};
+    //if (setTrigger)
+    factoryDetection.activeTrigger = {index: el.index()};
 
     $rootScope.$broadcast(factoryDetection.activeTrigger.index > 0 ? 'menuClose' : 'menuOpen');
 
@@ -126,7 +126,7 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
   }
 
   function activeTriggerStatus(status) {
-    if (!_active) return;
+    if (_active === undefined) return;
     var el = _active.find('.el-menu-selected');
     status ? el.addClass('active') : el.removeClass('active');
   }
@@ -134,7 +134,7 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
   $scope.menus = factoryData.menus.bottom;
 
   $scope.click = function(e) {
-    var el = _active = $(e.currentTarget);
+    var el = $(e.currentTarget);
     if (el.data('menuIndex') == 0 && _lastVideo) {
       $rootScope.$broadcast('videoClose');
       $rootScope.$broadcast('topMenuReset');
@@ -359,6 +359,22 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
     anims = [];
   }
 
+  function triggerOn() {
+    $scope.info = factoryDetection.activeTrigger.index == 1 ? factoryData.info.soda : factoryData.info.redbull;
+    console.log($scope.info);
+    $scope.$apply();
+    factoryDetection.detectionTimeout(2);
+    $scope.open();
+    $timeout(function(){
+      $scope.anim();
+    }, 200);
+  }
+
+  function triggerOff() {
+    $scope.close();
+    $scope.reset();
+  }
+
   $scope.info = factoryData.info.soda;
 
   $scope.last = function(last) {
@@ -371,6 +387,7 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
   };
 
   $scope.open = function(e) {
+    $($element).show();
     $rootScope.$broadcast('toggleInfo', false);
     $scope.reset();
     $($element).css({'left' : '0px', 'opacity' : 1, 'z-index' : 2});
@@ -378,28 +395,33 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
 
   $scope.anim = function() {
 
-    var index= 4,
+    var index = 4,
         ssc = $('.soda-sugar-cube');
 
     $.each(ssc, function(i, el) {
       index++;
+      if (i >= parseInt($(el).parent().attr('data-sugar-cubes'))) return;
+
       anims.push($timeout(function(){
         $(el).removeClass('drop');
       }, i * Config.triggers.soda.sugarCubes.anim.interval));
     });
 
-    ssc.last().one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',
-      function() {
-        var line = $('.line');
+    // line animations only for coke trigger
+    if (factoryDetection.activeTrigger.index == 1) {
+      ssc.last().one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',
+        function () {
+          var line = $('.line');
 
-        line.first()
-          .css('top', Math.round($('.container img:nth-child(5)').offset().top + 2) + 'px')
-          .addClass('active');
+          line.first()
+            .css('top', Math.round($('.container img:nth-child(5)').offset().top + 2) + 'px')
+            .addClass('active');
 
-        line.last()
-          .css('top', Math.round($('.container img:nth-child(6)').offset().top - 5) + 'px')
-          .addClass('active');
-      });
+          line.last()
+            .css('top', Math.round($('.container img:nth-child(6)').offset().top - 5) + 'px')
+            .addClass('active');
+        });
+    }
 
     $.each($('.info-panel'), function(i, el) {
       anims.push($timeout(function(){
@@ -434,18 +456,10 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
     });
   };
 
-  $rootScope.$on(factoryDetection.eventName + '1:true', function () {
-    factoryDetection.detectionTimeout(2);
-    $scope.open();
-    $timeout(function(){
-      $scope.anim();
-    }, 200);
-  });
-
-  $rootScope.$on(factoryDetection.eventName + '1:false', function (event) {
-    $scope.close();
-    $scope.reset();
-  });
+  $rootScope.$on(factoryDetection.eventName + '1:true', triggerOn);
+  $rootScope.$on(factoryDetection.eventName + '1:false', triggerOff);
+  $rootScope.$on(factoryDetection.eventName + '2:true', triggerOn);
+  $rootScope.$on(factoryDetection.eventName + '2:false', triggerOff);
 
   $scope.close();
   $scope.reset();

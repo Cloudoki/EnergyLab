@@ -345,6 +345,7 @@ html {
   z-index: 1;
   -webkit-transition: all ease-in-out .2s;
   transition: all ease-in-out .2s;
+  display: none;
 }
 .triggered-soda .container {
   /*background: rgba(0, 136, 176, 0.4);*/
@@ -502,6 +503,7 @@ html {
 }
 .pane.dummy {
   background: url(../img/dummy.jpg) no-repeat center !important;
+  background-size: cover !important;
 }
 .pane.hide {
   opacity: 0;

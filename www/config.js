@@ -13,7 +13,7 @@ var Config = {
         version: '1.0.0'
     },
     triggers: {
-      defaultActive: 2,
+      defaultActive: 0,
       sven: {
         transition: 300, // miliseconds
         videos: [
