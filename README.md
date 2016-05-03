@@ -3,8 +3,11 @@
 ## Installation
 Install cordova and ionic globally with `npm install -g cordova ionic`.
 Go into `builder/` directory and do an npm and bower install by running the commands:
+
 `npm install` - will install npm dependencies
+
 `npm run bower install` - will install npm dependencies
+
 `npm run gulp` - will build the www directory, watch the dev directory for changes and update accordingly
 
 ### Note
