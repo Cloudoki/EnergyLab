@@ -45,7 +45,7 @@ function factoryDetection($rootScope) {
         pattern = 'coke.jpg';
         break;
       case 2:
-        pattern = 'red_bull_trigger.jpg';
+        pattern = 'appelsientje.jpg';
         break;
     }
 

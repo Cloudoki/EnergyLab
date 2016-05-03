@@ -360,7 +360,7 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
   }
 
   function triggerOn() {
-    $scope.info = factoryDetection.activeTrigger.index == 1 ? factoryData.info.soda : factoryData.info.redbull;
+    $scope.info = factoryDetection.activeTrigger.index == 1 ? factoryData.info.soda : factoryData.info.appelsientje;
     console.log($scope.info);
     $scope.$apply();
     factoryDetection.detectionTimeout(2);
@@ -407,7 +407,7 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
       }, i * Config.triggers.soda.sugarCubes.anim.interval));
     });
 
-    // line animations only for coke trigger
+    // line animations for Coke trigger
     if (factoryDetection.activeTrigger.index == 1) {
       ssc.last().one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',
         function () {
@@ -415,11 +415,26 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
 
           line.first()
             .css('top', Math.round($('.container img:nth-child(5)').offset().top + 2) + 'px')
-            .addClass('active');
+            .addClass('active')
+            .find('div').text('25cl');
 
           line.last()
             .css('top', Math.round($('.container img:nth-child(6)').offset().top - 5) + 'px')
             .addClass('active');
+        });
+    }
+
+    // line animations for Appelsientje trigger
+    if (factoryDetection.activeTrigger.index == 2) {
+
+      $(ssc.get(7)).one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',
+        function () {
+          var line = $('.line');
+
+          line.first()
+            .css('top', Math.round($('.container img:nth-child(4)').offset().top - 5) + 'px')
+            .addClass('active')
+            .find('div').text('20cl');
         });
     }
 

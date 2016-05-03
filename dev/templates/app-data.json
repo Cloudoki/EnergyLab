@@ -30,8 +30,8 @@
       },
       {
         "id": 3,
-        "name": "redbull",
-        "image": "redbull.png"
+        "name": "appelsientje",
+        "image": "Appelsientje.png"
       }
     ]
   },
@@ -65,11 +65,11 @@
       {"name": "KCAL", "value": "210", "key": "foodKcal"},
       {"name": "KLONTJES SUIKER", "value": "9", "key": "foodSugarCubes"}
     ],
-    "redbull": [
-      {"name": "VOEDINGSMIDDEL", "value": "Red Bull", "key": "foodName"},
-      {"name": "PORTIE", "value": "250ml", "key": "foodPortion"},
-      {"name": "KCAL", "value": "225", "key": "foodKcal"},
-      {"name": "KLONTJES SUIKER", "value": "5", "key": "foodSugarCubes"}
+    "appelsientje": [
+      {"name": "VOEDINGSMIDDEL", "value": "Appelsientje", "key": "foodName"},
+      {"name": "PORTIE", "value": "400ml", "key": "foodPortion"},
+      {"name": "KCAL", "value": "164", "key": "foodKcal"},
+      {"name": "KLONTJES SUIKER", "value": "8", "key": "foodSugarCubes"}
     ]
   }
 }
