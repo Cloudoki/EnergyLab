@@ -8,3 +8,5 @@ builder/node_modules
 builder/bower_components
 .idea/
 .DS_Store
+wwww/
+npm-debug.log

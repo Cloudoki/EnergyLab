@@ -259,6 +259,12 @@ html {
 .info .content .footer ul li:hover {
   color: #a3c617;
 }
+
+.info .content .footer .version {
+  font-size: 10px;
+  color: #808080;
+}
+
 .triggered-sven {
 
 }
@@ -559,5 +565,3 @@ html {
   url('../fonts/SourceSansProSemibold.ttf') format('truetype'),
   url('../fonts/SourceSansProSemibold.svg#SourceSansProSemibold') format('svg');
 }
-
-
