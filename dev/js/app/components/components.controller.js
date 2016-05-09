@@ -363,7 +363,7 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
     $scope.info = factoryDetection.activeTrigger.index == 1 ? factoryData.info.soda : factoryData.info.appelsientje;
     console.log($scope.info);
     $scope.$apply();
-    factoryDetection.detectionTimeout(2);
+    factoryDetection.detectionTimeout(5);
     $scope.open();
     $timeout(function(){
       $scope.anim();
