@@ -38,6 +38,7 @@
   "cordovaPlatforms": [],
   "scripts": {
     "gulp": "gulp",
-    "bower": "bower"
+    "bower": "bower",
+    "static": "http-server ../www -a localhost -p 8081 -o"
   }
 }

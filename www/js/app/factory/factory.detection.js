@@ -4,6 +4,40 @@ angular
 
 function factoryDetection($rootScope) {
 
+  var currentTouches = {},
+    eventName = { touchstart: 'touchstart', touchend: 'touchend' };
+
+  // detect 3 fingers touch to enable trigger action
+  var touchedOnce = false;
+  if (window.navigator.msPointerEnabled) {
+      eventName = { touchstart: 'MSPointerDown', touchend: 'MSPointerUp' };
+  }
+
+  document.addEventListener(eventName.touchstart, function(evt) {
+      var touches = evt.touches || [evt],
+          touch;
+      for(var i = 0, l = touches.length; i < l; i++) {
+          touch = touches[i];
+          currentTouches[touch.identifier || touch.pointerId] = touch;
+      }
+  });
+
+  document.addEventListener(eventName.touchend, function(evt) {
+      var touchCount = Object.keys(currentTouches).length;
+      currentTouches = {};
+      if (touchCount === 3 && !touchedOnce) {
+          evt.preventDefault();
+          isDetecting();
+          if(_activeTrigger.index != 0) {
+            touchedOnce = true;
+            setTimeout(function(){
+              isNotDetecting();
+              touchedOnce = false;
+            }, 10000);
+          }
+      }
+  }, false);
+
   // TODO - remove this line
   window.detectingTrigger = function(val) {
     return val ? isDetecting() : isNotDetecting();
@@ -19,6 +53,7 @@ function factoryDetection($rootScope) {
     _detecting = true;
     console.log(_eventName + _activeTrigger.index + ':' + _detecting);
     $rootScope.$broadcast(_eventName + _activeTrigger.index + ':' + _detecting);
+    $rootScope.$broadcast("TRIGGER_DETECTED", _activeTrigger);
   }
 
   function isNotDetecting() {

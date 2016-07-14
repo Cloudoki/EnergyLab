@@ -2,10 +2,11 @@ angular
 	.module('app.components', [])
   .controller('MenuTopCtrl', MenuTopCtrl)
   .controller('MenuBottomCtrl', MenuBottomCtrl)
+  .controller('PopupCtrl', PopupCtrl)
   .controller('InfoCtrl', InfoCtrl)
   .controller('TriggeredSvenCtrl', TriggeredSvenCtrl)
   .controller('TriggeredSodaCtrl', TriggeredSodaCtrl)
-	.run(init);
+  .run(init);
 
 function MenuTopCtrl($rootScope, $scope, $element, factoryData, factoryDetection, $timeout) {
 
@@ -87,8 +88,11 @@ function MenuTopCtrl($rootScope, $scope, $element, factoryData, factoryDetection
     $scope.toggleOpen();
   });
 
-  $rootScope.$on('topMenuReset', function (event) {
-    if (!$($element).find('.el-menu').hasClass('closed'))
+  $rootScope.$on('topMenuReset', function (event, igoneToogle) {
+
+    igoneToogle = igoneToogle || false;
+
+    if (!$($element).find('.el-menu').hasClass('closed') && !igoneToogle)
       $scope.toggle();
 
     reset();
@@ -172,6 +176,18 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
   $rootScope.$on('videoClose', function (event) {
     activeTriggerStatus(false);
   });
+
+  $rootScope.$on('TRIGGER_DETECTED', function (event, target) {
+    console.log('TRIGGER_DETECTED', target);
+  });
+
+  console.log('--------->', factoryDetection.activeTrigger);
+}
+
+function PopupCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
+  $scope.close = function(e) {
+    $($element).fadeOut();
+  };
 }
 
 function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
@@ -201,7 +217,7 @@ function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
   };
 
   $rootScope.$on('infoOpen', function () {
-    $scope.open();
+    //$scope.open();
   });
 
   $scope.close();
@@ -285,10 +301,12 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     playVideo();
   };
 
-  $scope.close = function () {
+  $scope.close = function (disable) {
+
+    detection = disable ? false : true;
 
     $rootScope.$broadcast('toggleInfo', true);
-    factoryDetection.toggleDetection(true);
+    factoryDetection.toggleDetection(detection);
 
     $($element)
       .hide()
@@ -340,7 +358,10 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
       toggleControls(true);
     })
     .off('ended').on('ended', function() {
-
+      console.log('video ended!');
+      $rootScope.$broadcast('videoClose');
+      $rootScope.$broadcast('topMenuReset', true);
+      $scope.close(true);
       //factoryDetection.toggleDetection(true);
       //$rootScope.$broadcast('videoEnded');
     });
@@ -361,7 +382,6 @@ function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, 
 
   function triggerOn() {
     $scope.info = factoryDetection.activeTrigger.index == 1 ? factoryData.info.soda : factoryData.info.appelsientje;
-    console.log($scope.info);
     $scope.$apply();
     factoryDetection.detectionTimeout(5);
     $scope.open();

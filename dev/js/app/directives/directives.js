@@ -3,6 +3,7 @@ angular
   .directive('elSplash', elSplash)
 	.directive('elMenuTop', elMenuTop)
 	.directive('elMenuBottom', elMenuBottom)
+  .directive('elPopup', elPopup)
 	.directive('elInfo', elInfo)
 	.directive('elSwipeArea', elSwipeArea)
 	.directive('elTriggeredSven', elTriggeredSven)
@@ -48,6 +49,19 @@ function elMenuBottom($timeout) {
     },
     replace: true,
     template: '<ng-include src="menuBottom"></ng-include>'
+  }
+}
+
+function elPopup($timeout) {
+  return {
+    restrict: 'E',
+    controller: function ($scope, $element, $attrs) {
+    },
+    link: function (scope, element, attrs) {
+      scope.popup = 'partials/popup.html';
+    },
+    replace: true,
+    template: '<ng-include src="popup"></ng-include>'
   }
 }
 

@@ -62,7 +62,7 @@ html {
   opacity: 0;
 }
 .el-menu.bottom {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.3);
   height: 12%;
   bottom: 0;
   line-height: 65px;
@@ -117,7 +117,7 @@ html {
   cursor: default;
   height: inherit;
   background-size: contain !important;
-  opacity: .6;
+  opacity: .4;
 }
 .el-menu.bottom li > div.el-menu-selected {
   background: #fff;
@@ -141,6 +141,59 @@ html {
 
 }
 /* --- menus end --- */
+
+.popup-info {
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.popup-info .panel > div {
+  padding: 25px 15px;
+}
+
+.popup-info .panel {
+  background-color: #e4e4e4;
+  width: 90%;
+  display: inline-block;
+  height: 50%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  bottom: 0;
+  top: 0;
+}
+
+.popup-info .panel .panel-overlay {
+  font-size: 25px;
+  position: absolute;
+  background-color: #a3c617;
+  width: 60px;
+  border-radius: 50%;
+  height: 60px;
+  right: 0;
+  left: 0;
+  margin: auto;
+  top: -40px;
+  border: 3px solid #fff;
+  background: #a3c617 url(../img/question-mark.png) no-repeat center;
+  background-size: 60%;
+}
+
+.popup-info .panel .panel-header {
+  font-size: 25px;
+  background-color: #fff;
+  color: #a3c617;
+}
+
+.popup-info .panel .panel-body {
+  opacity: .6;
+}
+
 .info {
   position: absolute;
   width: 100%;

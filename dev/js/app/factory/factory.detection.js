@@ -53,6 +53,7 @@ function factoryDetection($rootScope) {
     _detecting = true;
     console.log(_eventName + _activeTrigger.index + ':' + _detecting);
     $rootScope.$broadcast(_eventName + _activeTrigger.index + ':' + _detecting);
+    $rootScope.$broadcast("TRIGGER_DETECTED", _activeTrigger);
   }
 
   function isNotDetecting() {
