@@ -14,28 +14,30 @@ function factoryDetection($rootScope) {
   }
 
   document.addEventListener(eventName.touchstart, function(evt) {
-      var touches = evt.touches || [evt],
-          touch;
-      for(var i = 0, l = touches.length; i < l; i++) {
-          touch = touches[i];
-          currentTouches[touch.identifier || touch.pointerId] = touch;
-      }
+    var touches = evt.touches || [evt],
+        touch;
+
+    for(var i = 0, l = touches.length; i < l; i++) {
+      touch = touches[i];
+      currentTouches[touch.identifier || touch.pointerId] = touch;
+    }
   });
 
   document.addEventListener(eventName.touchend, function(evt) {
-      var touchCount = Object.keys(currentTouches).length;
-      currentTouches = {};
-      if (touchCount === 3 && !touchedOnce) {
-          evt.preventDefault();
-          isDetecting();
-          if(_activeTrigger.index != 0) {
-            touchedOnce = true;
-            setTimeout(function(){
-              isNotDetecting();
-              touchedOnce = false;
-            }, 10000);
-          }
+    var touchCount = Object.keys(currentTouches).length;
+    currentTouches = {};
+    
+    if (touchCount === 3 && !touchedOnce) {
+      evt.preventDefault();
+      isDetecting();
+      if(_activeTrigger.index != 0) {
+        touchedOnce = true;
+        setTimeout(function(){
+          isNotDetecting();
+          touchedOnce = false;
+        }, 10000);
       }
+    }
   }, false);
 
   // TODO - remove this line

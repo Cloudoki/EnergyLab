@@ -28,7 +28,7 @@ function factoryData($http) {
     return {
         //set menus(data) { _menuData = data; },
         get menus() { return _menuData; },
-        get triggers() { return _menuData; },
+        get triggers() { return _triggerData; },
         get info() { return _info; }
     };
 }

@@ -41,21 +41,24 @@
       "id": "01",
       "type": 1,
       "action": 1,
-      "url": ""
+      "url": "",
+      "info": "For Sven Nys trigger, please try to focus on the logo on a white background"
     },
     {
       "name": "Coke",
       "id": "02",
       "type": 2,
       "action": 2,
-      "url": ""
+      "url": "",
+      "info": "For Coke trigger, please try to focus on the logo on a white background"
     },
     {
-      "name": "Redbull",
+      "name": "Appelsientje",
       "id": "03",
       "type": 3,
       "action": 3,
-      "url": ""
+      "url": "",
+      "info": "For Appelsientje trigger, please try to focus on the logo on a white background"
     }
   ],
   "info": {

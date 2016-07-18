@@ -103,13 +103,15 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
 
   var _interact = true,
       _active,
-      _lastVideo;
+      _lastVideo,
+      _timeout;
 
   function activeTriggerTab(el) {
     if (!_interact) return;
     _interact = false;
 
     activeTriggerStatus(false);
+    startPopupCountdown();
 
     factoryDetection.toggleDetection(true);
 
@@ -127,6 +129,16 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
     $timeout(function() {
       _interact = true;
     }, 500);
+  }
+
+  function startPopupCountdown() {
+    console.log('starting popup cowntdown ..');
+
+    clearTimeout(_timeout);
+
+    _timeout = setTimeout(function(){
+      $rootScope.$broadcast('showInfoPopup');
+    }, 20 * 1000);
   }
 
   function activeTriggerStatus(status) {
@@ -177,17 +189,39 @@ function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
     activeTriggerStatus(false);
   });
 
-  $rootScope.$on('TRIGGER_DETECTED', function (event, target) {
-    console.log('TRIGGER_DETECTED', target);
+  $rootScope.$on('TRIGGER_DETECTED', function (event) {
+    clearTimeout(_timeout);
   });
 
-  console.log('--------->', factoryDetection.activeTrigger);
+  $rootScope.$on('playVideo', function (event) {
+    clearTimeout(_timeout);
+  });
+
+  startPopupCountdown();
 }
 
-function PopupCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
+function PopupCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
   $scope.close = function(e) {
-    $($element).fadeOut();
+    $($element).hide();
   };
+
+  $scope.open = function(e) {
+    $($element)
+      .find('.panel-body').html(factoryData.triggers[factoryDetection.activeTrigger.index].info);
+
+    $($element)
+      .fadeIn();
+  };
+
+  $rootScope.$on('showInfoPopup', function (event) {
+    $scope.open();
+  });
+
+  $rootScope.$on('TRIGGER_DETECTED', function (event) {
+    $scope.close();
+  });
+
+  $scope.close();
 }
 
 function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
