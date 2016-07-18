@@ -26,6 +26,7 @@
     "..\\ARToolKitCordovaPlugin"
   ],
   "cordovaPlatforms": [
-    "ios"
+    "ios",
+    "android"
   ]
 }
