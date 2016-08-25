@@ -1,4 +1,4 @@
-# EnergyLab
+# OMAD - One Mile a Day
 
 ## Installation
 Install cordova and ionic globally with `npm install -g cordova ionic`.
