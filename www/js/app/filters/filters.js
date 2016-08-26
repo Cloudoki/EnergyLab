@@ -1,11 +1,11 @@
 angular
     .module('app.filters', [])
     .run(init)
-    .filter('sugarCubes', sugarCubes);
+    .filter('websiteName', websiteName);
 
-function sugarCubes() {
+function websiteName() {
   return function(input) {
-    return _.find(input, { 'key': 'foodSugarCubes'}).value;
+    return input.replace(/.*?:\/\//g, "");
   };
 }
 

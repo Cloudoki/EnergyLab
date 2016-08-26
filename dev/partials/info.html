@@ -2,27 +2,20 @@
   <div class="open animated" ng-click="open()"></div>
   <div class="bar bar-header">
     <button class="button button-icon icon ion-chevron-left back" ng-click="close()"> Back</button>
-    <div class="title">Info</div>
+    <div class="title">{{content.title.active}}</div>
   </div>
   <div class="content">
-    <div class="title">LAAT JE TESTEN IN HET LABO</div>
+    <div class="title">{{content.title_text.active}}</div>
     <div class="body">
-      Onze dienstverleningen in het labo zijn erop gericht om jou op een verantwoorde en wetenschappelijk onderbouwde manier te helpen in het realiseren van je sportieve ambities. Dit doen we via een uitgebreid aanbod aan o.a. conditietesten, fietspositionering en voedingsadvies.
+      {{content.text.active}}
     </div>
-    <div class="services" data-action="testen" data-url="http://www.energylab.be/nl-BE/laat-je-testen" ng-click="services($event)">Ontdek onze dienstverlening</div>
-    <br/><br/>
-    <div class="title">Breng ook jouw bedrijf in beweging met Energy@Work</div>
-    <div class="body">
-      Energy@Work staat voor het uitwerken en implementeren van duurzame beweeg- en gezondheidscampagnes op maat van bedrijven.
-    </div>
-    <div class="services" data-action="work" data-url="http://www.energylab.be/nl-BE/energyatwork" ng-click="services($event)">Ontdek Energy@Work</div>
+    <div class="services" data-action="testen" data-url="{{content.button.link}}" ng-click="services($event)">{{content.button.caption.active}}</div>
     <div class="footer">
-      <div data-url="http://www.energylab.be" ng-click="services($event)">www.energylab.be</div>
+      <div data-url="{{social.website}}" ng-click="services($event)">{{social.website | websiteName}}</div>
       <div>
         <ul>
-          <li data-url="https://www.facebook.com/energylab.be" ng-click="services($event)"><i class="ion-social-facebook"></i></li>
-          <li data-url="https://twitter.com/energy_lab" ng-click="services($event)"><i class="ion-social-twitter"></i></li>
-          <li data-url="https://www.instagram.com/energylab.be" ng-click="services($event)"><i class="ion-social-instagram"></i></li>
+          <li data-url="{{social.facebook}}" ng-click="services($event)"><i class="ion-social-facebook"></i></li>
+          <li data-url="{{social.twitter}}" ng-click="services($event)"><i class="ion-social-twitter"></i></li>
         </ul>
       </div>
       <div class="version">version #0.0.0#</div>

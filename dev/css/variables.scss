@@ -1,0 +1,30 @@
+/* Colour variables */
+$main-color: rgba(0, 157, 224, 1);
+$main-color-light: rgba(0, 157, 224, .7);
+$main-color-extralight: rgba(0, 157, 224, .5);
+
+// Grey scale
+$dark-grey: #4e4e4e;
+$grey: #444F5C;
+$light-grey: #e9eae9;
+$lighter-grey: #f4f4f4;
+$white: #fff;
+
+// Functional
+$blue: #5488c4;
+$green: #a3ce51;
+$orange: #f68d43;
+$red: #e8423b;
+
+// Shadows
+$shadow: 0 0 5px 0 rgba(0,0,0,0.1);
+
+/* Font variables */
+$main-font: 300 14px/1.2em 'Droid Sans', 'Helvetica Neue', sans-serif;
+
+/* Load local fonts configuration example. */
+// $font-regular: YourFontRegular, Helvetica, sans-serif;
+// $font-semibold: YourFontSemiBold, Helvetica, sans-serif;
+// $font-bold: YourFontBold, Helvetica, sans-serif;
+// Add more variations, if necessary
+

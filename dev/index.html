@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-  <title>Energy Lab AR</title>
-
+  <title>OMAD - One Mile a Day</title>
+  <link rel="stylesheet" href="lib/ionic/css/ionic.min.css">
   <!-- inject:styles:css -->
   <!-- endinject -->
 
@@ -29,24 +29,20 @@
   <!-- inject:vendor:js -->
   <!-- endinject -->
 </head>
-<body ng-app="energyLab" ng-controller="AppCtrl">
+<body ng-app="omad" ng-controller="AppCtrl">
 
 <ion-pane>
   <ion-content scroll="false">
   </ion-content>
 </ion-pane>
-<!-- top menu -->
-<el-menu-top></el-menu-top>
-<!-- bottom menu -->
-<el-menu-bottom>\</el-menu-bottom>
+<!-- lang selection -->
+<el-lang-select></el-lang-select>
 <!-- popup -->
 <el-popup></el-popup>
 <!-- info -->
 <el-info></el-info>
 <!-- swipe area -->
 <el-swipe-area></el-swipe-area>
-<!-- triggered soda -->
-<el-triggered-soda></el-triggered-soda>
 <!-- triggered sven -->
 <el-triggered-sven></el-triggered-sven>
 </body>

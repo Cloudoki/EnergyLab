@@ -29,42 +29,55 @@ function factoryDetection($rootScope) {
     
     if (touchCount === 3 && !touchedOnce) {
       evt.preventDefault();
-      isDetecting();
-      if(_activeTrigger.index != 0) {
+      isDetecting(nextFakeTrigger());
+      /*if(_activeTrigger.index != 0) {
         touchedOnce = true;
         setTimeout(function(){
           isNotDetecting();
           touchedOnce = false;
         }, 10000);
-      }
+      }*/
     }
   }, false);
 
   // TODO - remove this line
-  window.detectingTrigger = function(val) {
-    return val ? isDetecting() : isNotDetecting();
+  window.detectingTrigger = function() {
+    //return val ? isDetecting() : isNotDetecting();
+    return isDetecting(nextFakeTrigger());
   };
 
   var _img,
+      _loadAllImg = 0,
+      _patternsHolder = [],
+      _limit = 3,
+      _imgDetectionPlugin,
       _eventName = 'trigger:',
-      _activeTrigger = {index: Config.triggers.defaultActive || 0, active: true, detected: false},
       _lastTrigger,
+      _fakeTriggerIndex = 2,
       _detecting = false;
 
-  function isDetecting() {
+  function isDetecting(data) {
     _detecting = true;
-    console.log(_eventName + _activeTrigger.index + ':' + _detecting);
-    $rootScope.$broadcast(_eventName + _activeTrigger.index + ':' + _detecting);
-    $rootScope.$broadcast("TRIGGER_DETECTED", _activeTrigger);
+    console.log(_eventName + data.index + ':' + _detecting);
+    $rootScope.$broadcast(_eventName + data.index + ':' + _detecting);
+    $rootScope.$broadcast("TRIGGER_DETECTED", data.index);
   }
 
-  function isNotDetecting() {
+  function nextFakeTrigger() {
+    _fakeTriggerIndex = _fakeTriggerIndex == 2 ? 0 : _fakeTriggerIndex+1;
+    return {
+      message: 'pattern detected',
+      index: _fakeTriggerIndex
+    }
+  }
+
+  /*function isNotDetecting() {
     _detecting = false;
     console.log(_eventName + _activeTrigger.index + ':' + _detecting);
     $rootScope.$broadcast(_eventName + _activeTrigger.index + ':' + _detecting);
-  }
+  }*/
 
-  function activeTrigger(data) {
+  /*function activeTrigger(data) {
     isNotDetecting();
     _lastTrigger = _activeTrigger = {
       index: data.index,
@@ -90,67 +103,103 @@ function factoryDetection($rootScope) {
 
     _img.src = 'img/patterns/' + pattern;
     console.log("trigger (" + pattern + ") selected");
+  }*/
+
+  function setAllPatterns(patterns) {
+    _imgDetectionPlugin.setPatterns(patterns, function(success){console.log(success);}, function(error){console.log(error);});
   }
+
+  function toDataUrl() {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var dataURL;
+    canvas.height = this.height;
+    canvas.width = this.width;
+    ctx.drawImage(this, 0, 0);
+    dataURL = canvas.toDataURL("image/jpeg", 0.8);
+
+    if (typeof _imgDetectionPlugin == 'undefined') return;
+
+    _patternsHolder.push(dataURL);
+    _loadAllImg += 1;
+    if(_loadAllImg == _limit){
+      console.log("patterns set", _patternsHolder);
+      setAllPatterns(_patternsHolder);
+    }
+    canvas = null;
+  };
 
   function init() {
 
     console.log('init factoryDetection ..');
-    _img = new Image();
-    _img.crossOrigin = "Anonymous";
-    _img.onload = function () {
-      var canvas = document.createElement('canvas');
-      var ctx = canvas.getContext('2d');
-      var dataURL;
-      canvas.height = this.height;
-      canvas.width = this.width;
-      ctx.drawImage(this, 0, 0);
-      dataURL = canvas.toDataURL("image/jpeg", 0.8);
-
-      if (typeof ImageDetectionPlugin == 'undefined') return;
-
-      ImageDetectionPlugin.setPattern(dataURL, function(success){console.log(success);}, function(error){console.log(error);});
-      canvas = null;
-    };
 
     if (typeof ImageDetectionPlugin == 'undefined') return;
 
-    ImageDetectionPlugin.isDetecting(function(success){
-      isDetecting();
+    _imgDetectionPlugin = window.pluggins.ImageDetectionPlugin || new ImageDetectionPlugin();
+    
+
+    // ------ trigger 1
+
+    _img = new Image();
+    _img.crossOrigin = "Anonymous";
+    _img.onload = function() {
+      toDataUrl(this);
+    }
+
+    _img.src = "img/patterns/coke.jpg";
+
+    // ------ trigger 2
+
+    _img = new Image();
+    _img.crossOrigin = "Anonymous";
+    _img.onload = function() {
+      toDataUrl(this);
+    }
+
+    _img.src = "img/patterns/sven.jpg";
+
+    // ------ trigger 3
+
+    _img = new Image();
+    _img.crossOrigin = "Anonymous";
+    _img.onload = function() {
+      toDataUrl(this);
+    }
+
+    _img.src = "img/patterns/appelsientje.jpg";
+
+    if (typeof ImageDetectionPlugin == 'undefined') return;
+
+    _imgDetectionPlugin.isDetecting(function(data){
+      data = JSON.parse(data);
+      isDetecting(data);
     }, function(error){
       isNotDetecting();
     });
-
-    activeTrigger(_lastTrigger);
   }
 
   function toggleDetection(state) {
 
-    if (typeof ImageDetectionPlugin == 'undefined' || ImageDetectionPlugin.startProcessing == undefined) {
-      console.log("ImageDetectionPlugin is not defined!");
+    if (typeof _imgDetectionPlugin == 'undefined' || _imgDetectionPlugin.startProcessing == undefined) {
+      console.log("_imgDetectionPlugin is not defined!");
       return;
     }
 
     console.log("toggleDetection->", state);
 
-    ImageDetectionPlugin.startProcessing(state, function(success){console.log(success);}, function(error){console.log(error);});
+    _imgDetectionPlugin.startProcessing(state, function(success){console.log(success);}, function(error){console.log(error);});
   }
 
   function detectionTimeout(t) {
-    if (typeof ImageDetectionPlugin == 'undefined' || ImageDetectionPlugin.startProcessing == undefined) {
-      console.log("ImageDetectionPlugin is not defined!");
+    if (typeof _imgDetectionPlugin == 'undefined' || _imgDetectionPlugin.startProcessing == undefined) {
+      console.log("_imgDetectionPlugin is not defined!");
       return;
     }
 
-    ImageDetectionPlugin.setDetectionTimeout(t, function(success){console.log(success);}, function(error){console.log(error);});
+    _imgDetectionPlugin.setDetectionTimeout(t, function(success){console.log(success);}, function(error){console.log(error);});
   }
 
   return {
-    set activeTrigger(data) {
-      activeTrigger(data);
-    },
-    get activeTrigger() {
-      return _activeTrigger;
-    },
     get eventName() {
       return _eventName;
     },
@@ -159,8 +208,8 @@ function factoryDetection($rootScope) {
     },
     init: init,
     toggleDetection: toggleDetection,
-    detectionTimeout: detectionTimeout,
-    removeLastTrigger: isNotDetecting
+    detectionTimeout: detectionTimeout
+    //removeLastTrigger: isNotDetecting
   };
 }
 

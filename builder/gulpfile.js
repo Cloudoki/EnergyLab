@@ -20,7 +20,7 @@ taskLoader('gulp_tasks');
 
 gulp.task('default', function() {
   ENV_MODE = env.cordova;
-  runSequence('clean', ['bower', 'js', 'css', 'json', 'sass', 'partials', 'img', 'fonts'], 'inject', 'watch');
+  runSequence('clean', ['bower', 'js', 'json', 'partials', 'img', 'fonts', 'sass'], 'inject', 'watch');
 });
 
 gulp.task('install', ['git-check'], function() {

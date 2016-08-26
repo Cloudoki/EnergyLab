@@ -1,54 +1,23 @@
 angular
 	.module('app.directives', [])
-  .directive('elSplash', elSplash)
-	.directive('elMenuTop', elMenuTop)
-	.directive('elMenuBottom', elMenuBottom)
+  .directive('elLangSelect', elLangSelect)
   .directive('elPopup', elPopup)
 	.directive('elInfo', elInfo)
 	.directive('elSwipeArea', elSwipeArea)
 	.directive('elTriggeredSven', elTriggeredSven)
-	.directive('elTriggeredSoda', elTriggeredSoda)
-  .directive('elSodaSugarCube', elSodaSugarCube)
-  .directive('elSodaInfo', elSodaInfo)
 	.run(init);
 
-function elSplash($timeout) {
+function elLangSelect($timeout) {
   return {
     restrict: 'E',
     controller: function ($scope, $element, $attrs) {
       console.log("inside splash directive ..");
     },
     link: function (scope, element, attrs) {
-      scope.template = 'partials/splash.html';
+      scope.lang = 'partials/lang-select.html';
     },
     replace: true,
-    template: '<ng-include src="template"></ng-include>'
-  }
-}
-
-function elMenuTop($timeout, factoryData) {
-  return {
-    restrict: 'E',
-    controller: function ($scope, $element, $attrs) {
-    },
-    link: function (scope, element, attrs) {
-      scope.menuTop = 'partials/menu.top.html';
-    },
-    replace: true,
-    template: '<ng-include src="menuTop"></ng-include>'
-  }
-}
-
-function elMenuBottom($timeout) {
-  return {
-    restrict: 'E',
-    controller: function ($scope, $element, $attrs) {
-    },
-    link: function (scope, element, attrs) {
-      scope.menuBottom = 'partials/menu.bottom.html';
-    },
-    replace: true,
-    template: '<ng-include src="menuBottom"></ng-include>'
+    template: '<ng-include src="lang"></ng-include>'
   }
 }
 
@@ -101,43 +70,6 @@ function elTriggeredSven($timeout) {
     },
     replace: true,
     template: '<ng-include src="triggeredSven"></ng-include>'
-  }
-}
-
-function elTriggeredSoda($timeout) {
-  return {
-    restrict: 'E',
-    controller: function ($scope, $element, $attrs) {
-    },
-    link: function (scope, element, attrs) {
-      scope.triggeredSoda = 'partials/triggered.soda.html';
-    },
-    replace: true,
-    template: '<ng-include src="triggeredSoda"></ng-include>'
-  }
-}
-
-function elSodaSugarCube($timeout) {
-  return {
-    restrict: 'E',
-    controller: function ($scope, $element, $attrs) {
-    },
-    link: function (scope, element, attrs) {
-    },
-    replace: true,
-    template: '<img class="soda-sugar-cube" src="img/sugar-cube.png" alt=""/>'
-  }
-}
-
-function elSodaInfo($timeout) {
-  return {
-    restrict: 'E',
-    controller: function ($scope, $element, $attrs) {
-    },
-    link: function (scope, element, attrs) {
-    },
-    replace: true,
-    template: '<div class="info-panel"><span class="name">{{data.name}}</span><span class="value {{last($last)}}">{{data.value}}</span></div>'
   }
 }
 

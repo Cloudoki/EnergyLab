@@ -1,6 +1,6 @@
 // create the module and name it energyLab
 angular
-    .module('energyLab', [
+    .module('omad', [
         'ionic',
         'app.filters',
         'app.directives',

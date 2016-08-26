@@ -1,204 +1,23 @@
 angular
 	.module('app.components', [])
-  .controller('MenuTopCtrl', MenuTopCtrl)
-  .controller('MenuBottomCtrl', MenuBottomCtrl)
+  .controller('LangSelectCtrl', LangSelectCtrl)
   .controller('PopupCtrl', PopupCtrl)
   .controller('InfoCtrl', InfoCtrl)
   .controller('TriggeredSvenCtrl', TriggeredSvenCtrl)
-  .controller('TriggeredSodaCtrl', TriggeredSodaCtrl)
   .run(init);
 
-function MenuTopCtrl($rootScope, $scope, $element, factoryData, factoryDetection, $timeout) {
+function LangSelectCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
+  $scope.select = function(e) {
 
-  var _interact = true,
-      _toggleOpen,
-      _active;
+    $rootScope.activeLang = $(e.currentTarget).data('lang');
 
-  function reset() {
-    _active = _toggleOpen = null;
-    $($element).find('li').removeClass('active');
-  }
-
-  $scope.menus = factoryData.menus.top;
-
-  $scope.click = function(e) {
-
-    var el = $(e.currentTarget),
-        index = el.data('menuIndex');
-
-    if (!_interact || _active === index) return;
-    _interact = false;
-
-    reset();
-    el.addClass('active');
-
-    _active = index;
-
-    $rootScope.$broadcast('playVideo', index);
-
-    $timeout(function() {
-      _interact = true;
-    }, 1000);
+    $($element).fadeOut(function(){
+      $(this).remove();
+    });
   };
-
-  $scope.open = function() {
-    //$($element).find('.el-menu.top').removeClass('closed');
-    $($element).find('.el-menu-open').removeClass('closed');
-  };
-
-  $scope.close = function() {
-    $($element).find('.el-menu.top').addClass('closed');
-    $($element).find('.el-menu-open').addClass('closed');
-    reset();
-  };
-
-  $scope.toggle = function() {
-    var mt = $($element).find('.el-menu.top');
-    var mb = $($element).find('.el-menu-open');
-
-    mt.hasClass('closed') ? mt.removeClass('closed') : mt.addClass('closed');
-    mb.hasClass('closed') ? mb.removeClass('closed') : mb.addClass('closed');
-  };
-
-  $scope.toggleOpen = function() {
-    if (_toggleOpen) return;
-    _toggleOpen = true;
-    $($element).find('.el-menu.top').removeClass('closed');
-    $($element).find('.el-menu-open').addClass('closed');
-  };
-
-  $scope.onSwipeUp = function() {
-    $scope.toggle();
-  };
-
-  $scope.onSwipeDown = function() {
-    $scope.toggle();
-  };
-
-  $rootScope.$on('menuOpen', function (event) {
-    if (factoryDetection.activeTrigger.index > 0) return;
-    $scope.open();
-  });
-
-  $rootScope.$on('menuClose', function (event) {
-    $scope.close();
-  });
-
-  $rootScope.$on('topMenuOpen', function (event) {
-    $scope.toggleOpen();
-  });
-
-  $rootScope.$on('topMenuReset', function (event, igoneToogle) {
-
-    igoneToogle = igoneToogle || false;
-
-    if (!$($element).find('.el-menu').hasClass('closed') && !igoneToogle)
-      $scope.toggle();
-
-    reset();
-  });
 }
 
-function MenuBottomCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
-
-  var _interact = true,
-      _active,
-      _lastVideo,
-      _timeout;
-
-  function activeTriggerTab(el) {
-    if (!_interact) return;
-    _interact = false;
-
-    activeTriggerStatus(false);
-    startPopupCountdown();
-
-    factoryDetection.toggleDetection(true);
-
-    //var setTrigger = !!el;
-
-    _active = el = el || $($element).find('li').eq(factoryDetection.activeTrigger.index);
-    $($element).find('li').removeClass('active');
-    el.addClass('active');
-
-    //if (setTrigger)
-    factoryDetection.activeTrigger = {index: el.index()};
-
-    $rootScope.$broadcast(factoryDetection.activeTrigger.index > 0 ? 'menuClose' : 'menuOpen');
-
-    $timeout(function() {
-      _interact = true;
-    }, 500);
-  }
-
-  function startPopupCountdown() {
-    console.log('starting popup cowntdown ..');
-
-    clearTimeout(_timeout);
-
-    _timeout = setTimeout(function(){
-      $rootScope.$broadcast('showInfoPopup');
-    }, 20 * 1000);
-  }
-
-  function activeTriggerStatus(status) {
-    if (_active === undefined) return;
-    var el = _active.find('.el-menu-selected');
-    status ? el.addClass('active') : el.removeClass('active');
-  }
-
-  $scope.menus = factoryData.menus.bottom;
-
-  $scope.click = function(e) {
-    var el = $(e.currentTarget);
-    if (el.data('menuIndex') == 0 && _lastVideo) {
-      $rootScope.$broadcast('videoClose');
-      $rootScope.$broadcast('topMenuReset');
-      return;
-    }
-    if (el.hasClass('active')) return;
-    activeTriggerTab(el);
-  };
-
-  $scope.onSwipeLeft = function() {
-    if (factoryDetection.activeTrigger.index === 0) return;
-    factoryDetection.removeLastTrigger();
-    factoryDetection.activeTrigger.index--;
-    activeTriggerTab();
-  };
-
-  $scope.onSwipeRight = function() {
-    if (factoryDetection.activeTrigger.index === 2) return;
-    factoryDetection.removeLastTrigger();
-    factoryDetection.activeTrigger.index++;
-    activeTriggerTab();
-  };
-
-  $timeout(function(){activeTriggerTab()});
-
-  $rootScope.$on('videoStarted', function (event, active) {
-    _lastVideo = active;
-    activeTriggerStatus(true);
-  });
-
-  $rootScope.$on('videoEnded', function (event) {
-    _lastVideo = null;
-  });
-
-  $rootScope.$on('videoClose', function (event) {
-    activeTriggerStatus(false);
-  });
-
-  $rootScope.$on('TRIGGER_DETECTED', function (event) {
-    clearTimeout(_timeout);
-  });
-
-  $rootScope.$on('playVideo', function (event) {
-    clearTimeout(_timeout);
-  });
-
-  startPopupCountdown();
-}
+/* ============================================== */
 
 function PopupCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
   $scope.close = function(e) {
@@ -224,7 +43,51 @@ function PopupCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryD
   $scope.close();
 }
 
+/* ============================================== */
+
 function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
+   $rootScope.$watch(
+      "activeLang",
+      function handleLangChange( newValue, oldValue ) {
+
+          $scope.content.title.active = $scope.content.title[$rootScope.activeLang];
+          $scope.content.title_text.active = $scope.content.title_text[$rootScope.activeLang];
+          $scope.content.text.active = $scope.content.text[$rootScope.activeLang];
+          $scope.content.button.caption.active = $scope.content.button.caption[$rootScope.activeLang];
+      }
+  );
+
+  $scope.social = {
+    website: 'http://www.onemileaday.be',
+    facebook: 'https://www.facebook.com/OneMileADay.be',
+    twitter: 'https://twitter.com/OneMileADay'
+  };
+
+  $scope.content = {
+    title: {
+      nl: 'One Mile A Day',
+      fr: 'One Mile A Day',
+      active: ''
+    },
+    title_text: {
+      nl: 'Over One Mile a Day',
+      fr: 'A propos de One Mile a Day',
+      active: ''
+    },
+    text: {
+      nl: 'Het doel van ‘One Mile a Day’ is simpel: de lange inactieve blokken op school doorbreken met een korte, maar dagelijkse bewegingsactiviteit met de hele klas. De kinderen van de lagere school gaan samen met hun leerkracht 1 mijl (1,6 km) lopen of wandelen in de frisse buitenlucht. Nadien wordt de klasactiviteit gewoon hervat. Het project, dat in Schotland zijn oorsprong vond, heeft daar aangetoond dat de kinderen na ‘de mile’ de lesactiviteiten met meer energie en concentratie hervatten.',
+      fr: 'L’objectif de « One Mile a Day » est simple : interrompre les longues périodes d’inactivité à l’école par une activité physique, brève mais quotidienne, avec l’ensemble de la classe. Les élèves de l’école primaire sortent en plein air avec leur enseignant pour courir ou marcher sur une distance de 1 mile (1,6 km). Les cours reprennent ensuite normalement. Le projet, qui trouve son origine en Écosse, a démontré que, après le « mile », les élèves reprennent les cours en étant détendus et davantage concentrés.',
+      active: ''
+    },
+    button: {
+      caption: {
+        'nl': 'Bezoek de website',
+        'fr': 'Visitez notre site Web',
+        active: ''
+      },
+      link: 'http://onemileaday.be'
+    }
+  };
 
   $(window).on('resize', function(e){
     $($element).css('left', $(e.currentTarget).width());
@@ -254,8 +117,6 @@ function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
     //$scope.open();
   });
 
-  $scope.close();
-
   $rootScope.$on('toggleInfo', function (e, status) {
     var close = function() {
       $scope.close();
@@ -263,7 +124,11 @@ function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
     };
     status ? $($element).show() : close();
   });
+
+  $scope.close();
 }
+
+/* ============================================== */
 
 function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
 
@@ -401,138 +266,9 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     });
 }
 
-function TriggeredSodaCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
 
-  $($element).find('.container').css({'background-color' : Config.triggers.soda.backgroundColor});
-
-  var anims = [];
-
-  function clearAnims() {
-    for (var i = 0; i < anims.length; i++) {
-      $timeout.cancel(anims[i]);
-    }
-    anims = [];
-  }
-
-  function triggerOn() {
-    $scope.info = factoryDetection.activeTrigger.index == 1 ? factoryData.info.soda : factoryData.info.appelsientje;
-    $scope.$apply();
-    factoryDetection.detectionTimeout(5);
-    $scope.open();
-    $timeout(function(){
-      $scope.anim();
-    }, 200);
-  }
-
-  function triggerOff() {
-    $scope.close();
-    $scope.reset();
-  }
-
-  $scope.info = factoryData.info.soda;
-
-  $scope.last = function(last) {
-    return last ? 'bold' : '';
-  };
-
-  $scope.close = function(e) {
-    $rootScope.$broadcast('toggleInfo', true);
-    $($element).css({'left' : $($element).width() + 'px', 'opacity' : 0});
-  };
-
-  $scope.open = function(e) {
-    $($element).show();
-    $rootScope.$broadcast('toggleInfo', false);
-    $scope.reset();
-    $($element).css({'left' : '0px', 'opacity' : 1, 'z-index' : 2});
-  };
-
-  $scope.anim = function() {
-
-    var index = 4,
-        ssc = $('.soda-sugar-cube');
-
-    $.each(ssc, function(i, el) {
-      index++;
-      if (i >= parseInt($(el).parent().attr('data-sugar-cubes'))) return;
-
-      anims.push($timeout(function(){
-        $(el).removeClass('drop');
-      }, i * Config.triggers.soda.sugarCubes.anim.interval));
-    });
-
-    // line animations for Coke trigger
-    if (factoryDetection.activeTrigger.index == 1) {
-      ssc.last().one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',
-        function () {
-          var line = $('.line');
-
-          line.first()
-            .css('top', Math.round($('.container img:nth-child(5)').offset().top + 2) + 'px')
-            .addClass('active')
-            .find('div').text('25cl');
-
-          line.last()
-            .css('top', Math.round($('.container img:nth-child(6)').offset().top - 5) + 'px')
-            .addClass('active');
-        });
-    }
-
-    // line animations for Appelsientje trigger
-    if (factoryDetection.activeTrigger.index == 2) {
-
-      $(ssc.get(7)).one('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',
-        function () {
-          var line = $('.line');
-
-          line.first()
-            .css('top', Math.round($('.container img:nth-child(4)').offset().top - 5) + 'px')
-            .addClass('active')
-            .find('div').text('20cl');
-        });
-    }
-
-    $.each($('.info-panel'), function(i, el) {
-      anims.push($timeout(function(){
-        $(el).removeClass('off');
-      }, (index + i) * Config.triggers.soda.sugarCubes.anim.interval));
-    });
-
-    $timeout(function(){
-      $($element).find('.content').addClass('shadow');
-    }, Config.triggers.soda.sugarCubes.anim.interval * 3);
-  };
-
-  $scope.reset = function() {
-
-    $($element).find('.content').removeClass('shadow');
-
-    $('.line').removeClass('active');
-
-    $('.soda-sugar-cube')
-      .removeClass('animated')
-      .addClass('drop');
-
-    $('.info-panel')
-      .removeClass('animated')
-      .addClass('off');
-
-    clearAnims();
-
-    $timeout(function(){
-      $('.soda-sugar-cube, .info-panel')
-        .addClass('animated');
-    });
-  };
-
-  $rootScope.$on(factoryDetection.eventName + '1:true', triggerOn);
-  $rootScope.$on(factoryDetection.eventName + '1:false', triggerOff);
-  $rootScope.$on(factoryDetection.eventName + '2:true', triggerOn);
-  $rootScope.$on(factoryDetection.eventName + '2:false', triggerOff);
-
-  $scope.close();
-  $scope.reset();
-}
+/* ============================================== */
 
 function init($rootScope) {
+  $rootScope.activeLang = 'nl';
 }
