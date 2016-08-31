@@ -14,19 +14,36 @@ function LangSelectCtrl($rootScope, $scope, $element, $timeout, factoryData, fac
     $rootScope.activeLang = $(e.currentTarget).data('lang');
 
     $($element).remove();
+
+    $rootScope.$broadcast("popupStart");
   };
 }
 
 /* ============================================== */
 
 function PopupCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
+  var timeout;
+
+  function startPopupCountdown() {
+    if (!$rootScope.activeLang) return;
+    
+    console.log('started popup cowntdown ..');
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(function(){
+      $rootScope.$broadcast('showInfoPopup');
+    }, 15 * 1000);
+  }
+
   $scope.close = function(e) {
     $($element).hide();
+    startPopupCountdown();
   };
 
   $scope.open = function(e) {
-    $($element)
-      .find('.panel-body').html(factoryData.triggers[factoryDetection.activeTrigger.index].info);
+    // $($element)
+    //   .find('.panel-body').html(factoryData.triggers[factoryDetection.activeTrigger.index].info);
 
     $($element)
       .fadeIn();
@@ -35,6 +52,15 @@ function PopupCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryD
   $rootScope.$on('showInfoPopup', function (event) {
     $scope.open();
   });
+
+  $rootScope.$on('popupStart', function (event) {
+    startPopupCountdown();
+  });
+
+  $rootScope.$on('popupStop', function (event) {
+    console.log('stoped popup cowntdown ..');
+    clearTimeout(timeout);
+  });  
 
   $rootScope.$on('TRIGGER_DETECTED', function (event) {
     $scope.close();
@@ -173,6 +199,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   function playVideo() {
 
+    $rootScope.$broadcast('popupStop');
     $rootScope.$broadcast('toggleInfo', false);
     factoryDetection.toggleDetection(false);
 
@@ -238,6 +265,8 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     resetVideo();
 
     toggleClose(true);
+
+     $rootScope.$broadcast('popupStart');
   };
 
   $rootScope.$on('TRIGGER_DETECTED', function (event, index) {
@@ -295,5 +324,5 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 /* ============================================== */
 
 function init($rootScope) {
-  $rootScope.activeLang = 'nl';
+  //$rootScope.activeLang = 'nl';
 }
