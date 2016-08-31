@@ -9,11 +9,11 @@ angular
 function LangSelectCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
   $scope.select = function(e) {
 
+    factoryDetection.init();
+
     $rootScope.activeLang = $(e.currentTarget).data('lang');
 
-    $($element).fadeOut(function(){
-      $(this).remove();
-    });
+    $($element).remove();
   };
 }
 
@@ -46,14 +46,14 @@ function PopupCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryD
 /* ============================================== */
 
 function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
+
    $rootScope.$watch(
       "activeLang",
       function handleLangChange( newValue, oldValue ) {
-
-          $scope.content.title.active = $scope.content.title[$rootScope.activeLang];
-          $scope.content.title_text.active = $scope.content.title_text[$rootScope.activeLang];
-          $scope.content.text.active = $scope.content.text[$rootScope.activeLang];
-          $scope.content.button.caption.active = $scope.content.button.caption[$rootScope.activeLang];
+        $scope.content.title.active = $scope.content.title[$rootScope.activeLang];
+        $scope.content.title_text.active = $scope.content.title_text[$rootScope.activeLang];
+        $scope.content.text.active = $scope.content.text[$rootScope.activeLang];
+        $scope.content.button.caption.active = $scope.content.button.caption[$rootScope.activeLang];
       }
   );
 
@@ -133,7 +133,7 @@ function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
 function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
 
   window.videos = [];
-  var active;
+  var active, videoIndex = 0;
 
   function toggleControls(visible) {
     visible ? $($element).find('.play').fadeIn(200) : $($element).find('.play').fadeOut(50);
@@ -157,12 +157,21 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
   }
 
   function togglePause() {
-    active.firstTime = false;
     var v = $($element).find('video').get(0);
     v.paused ? v.play() : v.pause();
   }
 
-  function playVideo(index) {
+  function toggleClose(close) {
+    if (close) {
+      $('.close').removeClass('active');
+    } else {
+      setTimeout(function(){
+        $('.close').addClass('active');
+      }, 1500);
+    }
+  }
+
+  function playVideo() {
 
     $rootScope.$broadcast('toggleInfo', false);
     factoryDetection.toggleDetection(false);
@@ -180,12 +189,19 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
       el.find('.vid-layer').removeClass('hidden');
     }, Config.triggers.sven.transition * 2);
 
-    index = index || 0;
 
-    active = videos[index];
-    active.menuIndex = index;
-    active.firstTime = true;
-    $('#sven-video').attr('src', active.url);
+    active = videos[videoIndex];
+
+    var vid = $('#sven-video');
+
+    vid.attr('src', active.url[$rootScope.activeLang]);
+
+    active.loop ? vid.attr('loop', '') : vid.removeAttr('loop');
+    active.loop ? vid.addClass('loop') : vid.removeClass('loop');
+
+    if (active.landscape && screen.lockOrientation)
+      screen.lockOrientation('landscape');
+    
 
     $timeout(function(){
       $('#sven-video').addClass('visible');
@@ -198,9 +214,17 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   $scope.open = function () {
     playVideo();
+
+    toggleClose();
   };
 
-  $scope.close = function (disable) {
+  $scope.close = function (e, disable) {
+
+    if (screen.lockOrientation)
+      screen.lockOrientation('portrait');
+
+    if (e)
+      e.stopPropagation();
 
     detection = disable ? false : true;
 
@@ -212,9 +236,22 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
       .find('.mid-layer, .vid-layer').addClass('hidden');
 
     resetVideo();
+
+    toggleClose(true);
   };
 
-  $rootScope.$on(factoryDetection.eventName + '0:true', function () {
+  $rootScope.$on('TRIGGER_DETECTED', function (event, index) {
+
+    $rootScope.$broadcast('videoEnded');
+    videoIndex = index;
+
+    $timeout(function(){
+      $scope.open();
+    }, 100);
+    
+  });
+
+  /*$rootScope.$on(factoryDetection.eventName + '0:true', function () {
 
     $rootScope.$broadcast('videoEnded');
 
@@ -223,19 +260,14 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     $timeout(function(){
       $scope.open();
     }, 100);
-  });
+  });*/
 
-  $rootScope.$on(factoryDetection.eventName + '0:false', function () {
+  /*$rootScope.$on(factoryDetection.eventName + '0:false', function () {
     $scope.close();
-  });
+  });*/
 
   $rootScope.$on('videoClose', function () {
     $scope.close();
-  });
-
-  $scope.$on('playVideo', function (e, index) {
-    console.log("PLAY_VIDEO", index);
-    playVideo(index);
   });
 
   loadVideos();
@@ -243,12 +275,6 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
   $scope.close();
 
   $('#sven-video')
-    .on('timeupdate', function(){
-      if (!active) return;
-      if (this.currentTime > active.trigger && !!active.trigger) {
-        $rootScope.$broadcast('topMenuOpen');
-      }
-    })
     .off('play').on('play', function() {
       toggleControls(false);
       $rootScope.$broadcast('videoStarted', active);
@@ -259,8 +285,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     .off('ended').on('ended', function() {
       console.log('video ended!');
       $rootScope.$broadcast('videoClose');
-      $rootScope.$broadcast('topMenuReset', true);
-      $scope.close(true);
+      $scope.close(null, true);
       //factoryDetection.toggleDetection(true);
       //$rootScope.$broadcast('videoEnded');
     });

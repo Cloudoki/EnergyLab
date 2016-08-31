@@ -49,6 +49,7 @@ function factoryDetection($rootScope) {
   var _img,
       _loadAllImg = 0,
       _patternsHolder = [],
+      _indexes = {},
       _limit = 3,
       _imgDetectionPlugin,
       _eventName = 'trigger:',
@@ -109,24 +110,29 @@ function factoryDetection($rootScope) {
     _imgDetectionPlugin.setPatterns(patterns, function(success){console.log(success);}, function(error){console.log(error);});
   }
 
-  function toDataUrl() {
+  function toDataUrl(self, cb) {
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');
     var dataURL;
-    canvas.height = this.height;
-    canvas.width = this.width;
-    ctx.drawImage(this, 0, 0);
+    canvas.height = self.height;
+    canvas.width = self.width;
+    ctx.drawImage(self, 0, 0);
     dataURL = canvas.toDataURL("image/jpeg", 0.8);
 
     if (typeof _imgDetectionPlugin == 'undefined') return;
 
     _patternsHolder.push(dataURL);
+    _indexes[_loadAllImg] = self.src.substr(self.src.lastIndexOf("/") + 1);
     _loadAllImg += 1;
+    console.log("!!!", _loadAllImg, _indexes);
     if(_loadAllImg == _limit){
       console.log("patterns set", _patternsHolder);
       setAllPatterns(_patternsHolder);
     }
     canvas = null;
+
+    if (cb)
+      cb();
   };
 
   function init() {
@@ -135,7 +141,7 @@ function factoryDetection($rootScope) {
 
     if (typeof ImageDetectionPlugin == 'undefined') return;
 
-    _imgDetectionPlugin = window.pluggins.ImageDetectionPlugin || new ImageDetectionPlugin();
+    _imgDetectionPlugin = window.plugins.ImageDetectionPlugin || new ImageDetectionPlugin();
     
 
     // ------ trigger 1
@@ -143,30 +149,30 @@ function factoryDetection($rootScope) {
     _img = new Image();
     _img.crossOrigin = "Anonymous";
     _img.onload = function() {
-      toDataUrl(this);
+      toDataUrl(this, function(){
+        // ------ trigger 2
+
+        _img = new Image();
+        _img.crossOrigin = "Anonymous";
+        _img.onload = function() {
+          toDataUrl(this, function(){
+            // ------ trigger 3
+
+            _img = new Image();
+            _img.crossOrigin = "Anonymous";
+            _img.onload = function() {
+              toDataUrl(this);
+            }
+
+            _img.src = "img/patterns/milestone.jpg";
+          });
+        }
+
+        _img.src = "img/patterns/kids.jpg";        
+      });
     }
 
-    _img.src = "img/patterns/coke.jpg";
-
-    // ------ trigger 2
-
-    _img = new Image();
-    _img.crossOrigin = "Anonymous";
-    _img.onload = function() {
-      toDataUrl(this);
-    }
-
-    _img.src = "img/patterns/sven.jpg";
-
-    // ------ trigger 3
-
-    _img = new Image();
-    _img.crossOrigin = "Anonymous";
-    _img.onload = function() {
-      toDataUrl(this);
-    }
-
-    _img.src = "img/patterns/appelsientje.jpg";
+    _img.src = "img/patterns/tia.jpg";
 
     if (typeof ImageDetectionPlugin == 'undefined') return;
 

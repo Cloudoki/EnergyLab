@@ -1,40 +1,4 @@
 {
-  "menus": {
-    "top": [
-      {
-        "id": 1,
-        "name": "Voeding",
-        "image": ""
-      },
-      {
-        "id": 2,
-        "name": "Conditie",
-        "image": ""
-      },
-      {
-        "id": 3,
-        "name": "Bodyscan",
-        "image": ""
-      }
-    ],
-    "bottom": [
-      {
-        "id": 1,
-        "name": "sven",
-        "image": "sven.png"
-      },
-      {
-        "id": 2,
-        "name": "coke ",
-        "image": "coke.png"
-      },
-      {
-        "id": 3,
-        "name": "appelsientje",
-        "image": "Appelsientje.png"
-      }
-    ]
-  },
   "triggers" : [
     {
       "name": "Sven Nys",

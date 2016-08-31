@@ -17,23 +17,31 @@ var Config = {
       sven: {
         transition: 300, // miliseconds
         videos: [
-          {id:1, url:'img/Composition067.mp4', trigger:25},
-          {id:2, url:'img/Composition075.mp4'},
-          {id:3, url:'img/Composition076.mp4'},
-          {id:4, url:'img/Composition081.mp4'}
-        ]
-      },
-      soda: {
-        backgroundColor: 'rgba(163, 198, 23, 0.4)',
-        sugarCubes: {
-          container: {
-            left: 0,
-            top: 0
+          {
+            id:1,
+            url: {
+              nl: 'img/energylab25fpsNL.mp4',
+              fr: 'img/energylab25fpsFR.mp4'
+            },
+            trigger:25
           },
-          anim: {
-            interval: 200 // miliseconds
+          {
+            id:2,
+            url: {
+              nl: 'img/OneMileADayGeelNL.mp4',
+              fr: 'img/OneMileADayGeelFR.mp4'
+            },
+            landscape: true
+          },
+          {
+            id:3,
+            url: {
+              nl: 'img/3DLoop.mp4',
+              fr: 'img/3DLoop.mp4'
+            },
+            loop: true
           }
-        }
+        ]
       }
     }
 };
