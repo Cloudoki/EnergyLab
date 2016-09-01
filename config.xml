@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.cloudoki.energylab" version="0.1.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>Energy Lab AR</name>
+  <name>One Mile a Day</name>
   <description>&#xD;
-        EnergyLab AR application.&#xD;
+        One Mile a Day AR application.&#xD;
     </description>
   <author email="nuno@cloudoki.com" href="http://www.cloudoki.com/">&#xD;
       Cloudoki&#xD;
