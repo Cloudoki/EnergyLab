@@ -26,7 +26,7 @@ function PopupCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryD
 
   function startPopupCountdown() {
     if (!$rootScope.activeLang) return;
-    
+
     console.log('started popup cowntdown ..');
 
     clearTimeout(timeout);
@@ -42,8 +42,14 @@ function PopupCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryD
   };
 
   $scope.open = function(e) {
-    // $($element)
-    //   .find('.panel-body').html(factoryData.triggers[factoryDetection.activeTrigger.index].info);
+
+    var msg = {
+      nl: 'Probeer iets verderaf of dichterbij te scannen voor een optimaal resultaat.',
+      fr: 'Placez votre téléphone plus près ou plus loin pour un résultat optimal.'
+    };
+
+    $($element)
+      .find('.panel-body').html(msg[$rootScope.activeLang]);
 
     $($element)
       .fadeIn();
