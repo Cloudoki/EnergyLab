@@ -7,11 +7,24 @@ angular
   .run(init);
 
 function LangSelectCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryDetection) {
+
+  if (window.localStorage && window.localStorage.lang) {
+    $rootScope.activeLang = window.localStorage.lang;
+    $($element).remove();
+
+    $timeout(function () {
+      factoryDetection.init();
+    }, 1000);
+  }
+
   $scope.select = function(e) {
 
     factoryDetection.init();
 
     $rootScope.activeLang = $(e.currentTarget).data('lang');
+
+    if (window.localStorage)
+      window.localStorage.lang = $rootScope.activeLang;
 
     $($element).remove();
 
@@ -42,14 +55,22 @@ function PopupCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryD
   };
 
   $scope.open = function(e) {
-
-    var msg = {
-      nl: 'Probeer iets verderaf of dichterbij te scannen voor een optimaal resultaat.',
-      fr: 'Placez votre téléphone plus près ou plus loin pour un résultat optimal.'
-    };
+    var info = {
+      title: {
+        nl: 'Wist je dat',
+        fr: 'Saviez-vous'
+      },
+      msg: {
+        nl: 'Probeer iets verderaf of dichterbij te scannen voor een optimaal resultaat.',
+        fr: 'Placez votre téléphone plus près ou plus loin pour un résultat optimal.'
+      }
+    }
 
     $($element)
-      .find('.panel-body').html(msg[$rootScope.activeLang]);
+      .find('.panel-header').html(info.title[$rootScope.activeLang])
+
+    $($element)
+      .find('.panel-body').html(info.msg[$rootScope.activeLang]);
 
     $($element)
       .fadeIn();
@@ -126,11 +147,14 @@ function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
   });
 
   $scope.open = function(e) {
+    $rootScope.$broadcast('popupStop');
+    $($element).addClass('open');
     factoryDetection.toggleDetection(false);
     $($element).css({'left' : '0px', 'opacity' : 1});
   };
 
   $scope.close = function(e) {
+    $rootScope.$broadcast('popupStart');
     factoryDetection.toggleDetection(true);
     $($element).find('.content').scrollTop(0);
     $($element).css({'left' : $($element).width() + 'px', 'opacity' : 1});
@@ -205,8 +229,9 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   function playVideo() {
 
-    $rootScope.$broadcast('popupStop');
     $rootScope.$broadcast('toggleInfo', false);
+    $rootScope.$broadcast('popupStop');
+    
     factoryDetection.toggleDetection(false);
 
     resetVideo();

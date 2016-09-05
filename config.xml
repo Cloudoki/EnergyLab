@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.cloudoki.energylab" version="0.1.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.cloudoki.energylab" version="0.1.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>One Mile a Day</name>
   <description>&#xD;
         One Mile a Day AR application.&#xD;
@@ -19,7 +19,7 @@
   <preference name="Orientation" value="portrait"/>
   <preference name="SplashScreen" value="screen"/>
   <preference name="AutoHideSplashScreen" value="true"/>
-  <preference name="SplashScreenDelay" value="5000"/>
+  <preference name="SplashScreenDelay" value="8000"/>
   <preference name="BackgroundColor" value="0x00000000"/>
   <feature name="StatusBar">
     <param name="ios-package" onload="false" value="CDVStatusBar"/>
