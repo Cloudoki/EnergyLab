@@ -26,7 +26,7 @@ function factoryDetection($rootScope) {
   document.addEventListener(eventName.touchend, function(evt) {
     var touchCount = Object.keys(currentTouches).length;
     currentTouches = {};
-    
+
     if (touchCount === 3 && !touchedOnce) {
       evt.preventDefault();
       isDetecting(nextFakeTrigger());
@@ -60,8 +60,10 @@ function factoryDetection($rootScope) {
   function isDetecting(data) {
     _detecting = true;
     console.log(_eventName + data.index + ':' + _detecting);
-    $rootScope.$broadcast(_eventName + data.index + ':' + _detecting);
-    $rootScope.$broadcast("TRIGGER_DETECTED", data.index);
+    if(data.play) {
+      $rootScope.$broadcast(_eventName + data.index + ':' + _detecting);
+      $rootScope.$broadcast("TRIGGER_DETECTED", data.index);
+    }
   }
 
   function nextFakeTrigger() {
@@ -142,7 +144,7 @@ function factoryDetection($rootScope) {
     if (typeof ImageDetectionPlugin == 'undefined') return;
 
     _imgDetectionPlugin = window.plugins.ImageDetectionPlugin || new ImageDetectionPlugin();
-    
+
 
     // ------ trigger 1
 
@@ -168,7 +170,7 @@ function factoryDetection($rootScope) {
           });
         }
 
-        _img.src = "img/patterns/kids.jpg";        
+        _img.src = "img/patterns/kids.jpg";
       });
     }
 
@@ -182,6 +184,23 @@ function factoryDetection($rootScope) {
     }, function(error){
       isNotDetecting();
     });
+
+    var patternsActions = {
+      "patterns": ["0", "2"],
+      "0": {
+        "type": "video",
+        "src_nl": "energylab25fpsNL",
+        "src_fr": "energylab25fpsFR"
+      },
+      "2": {
+        "type": "object",
+        "object": "milestone_obj",
+        "texture_nl": "milestone_texture_jpg",
+        "texture_fr": "milestone_texture_jpg"
+      }
+    };
+
+    _imgDetectionPlugin.setPatternsActions(patternsActions, function(success){console.log(success);}, function(error){console.log(error);});
   }
 
   function toggleDetection(state) {
