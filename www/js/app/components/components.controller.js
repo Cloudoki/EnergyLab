@@ -85,9 +85,9 @@ function PopupCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryD
   });
 
   $rootScope.$on('popupStop', function (event) {
-    console.log('stoped popup cowntdown ..');
+    console.log('stopped popup cowntdown ..');
     clearTimeout(timeout);
-  });  
+  });
 
   $rootScope.$on('TRIGGER_DETECTED', function (event) {
     $scope.close();
@@ -231,7 +231,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
     $rootScope.$broadcast('toggleInfo', false);
     $rootScope.$broadcast('popupStop');
-    
+
     factoryDetection.toggleDetection(false);
 
     resetVideo();
@@ -259,7 +259,6 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
     if (active.landscape && screen.lockOrientation)
       screen.lockOrientation('landscape');
-    
 
     $timeout(function(){
       $('#sven-video').addClass('visible');
@@ -305,10 +304,11 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     $rootScope.$broadcast('videoEnded');
     videoIndex = index;
 
-    $timeout(function(){
-      $scope.open();
-    }, 100);
-    
+		if(videoIndex == 1) {
+	    $timeout(function(){
+	      $scope.open();
+	    }, 100);
+		}
   });
 
   /*$rootScope.$on(factoryDetection.eventName + '0:true', function () {

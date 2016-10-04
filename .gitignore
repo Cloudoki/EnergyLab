@@ -11,3 +11,6 @@ builder/bower_components
 *.keystore
 www
 npm-debug.log
+
+# ignore vuforia license key file
+dev/license/vuforiaLicense.txt

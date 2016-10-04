@@ -4,6 +4,7 @@ angular
 
 function factoryDetection($rootScope) {
 
+/*
   var currentTouches = {},
     eventName = { touchstart: 'touchstart', touchend: 'touchend' };
 
@@ -36,9 +37,10 @@ function factoryDetection($rootScope) {
           isNotDetecting();
           touchedOnce = false;
         }, 10000);
-      }*/
+      }*x/
     }
   }, false);
+  */
 
   // TODO - remove this line
   window.detectingTrigger = function() {
@@ -51,21 +53,23 @@ function factoryDetection($rootScope) {
       _patternsHolder = [],
       _indexes = {},
       _limit = 3,
-      _imgDetectionPlugin,
+      _vuforiaCordovaPlugin,
       _eventName = 'trigger:',
       _lastTrigger,
       _fakeTriggerIndex = 2,
-      _detecting = false;
+      _detecting = false,
+      _shouldDetect = true;
 
   function isDetecting(data) {
-    _detecting = true;
+    _detecting = data.state;
     console.log(_eventName + data.index + ':' + _detecting);
-    if(data.play) {
-      $rootScope.$broadcast(_eventName + data.index + ':' + _detecting);
-      $rootScope.$broadcast("TRIGGER_DETECTED", data.index);
-    }
+
+    $rootScope.$broadcast(_eventName + data.index + ':' + _detecting);
+    $rootScope.$broadcast("TRIGGER_DETECTED", data.index);
+    $rootScope.$broadcast('popupStop');
   }
 
+  /*
   function nextFakeTrigger() {
     _fakeTriggerIndex = _fakeTriggerIndex == 2 ? 0 : _fakeTriggerIndex+1;
     return {
@@ -73,12 +77,14 @@ function factoryDetection($rootScope) {
       index: _fakeTriggerIndex
     }
   }
+  */
 
-  /*function isNotDetecting() {
+  function isNotDetecting(data) {
     _detecting = false;
-    console.log(_eventName + _activeTrigger.index + ':' + _detecting);
-    $rootScope.$broadcast(_eventName + _activeTrigger.index + ':' + _detecting);
-  }*/
+    console.log(_eventName + data.index + ':' + _detecting);
+    $rootScope.$broadcast(_eventName + data.index + ':' + _detecting);
+    $rootScope.$broadcast('popupStart');
+  }
 
   /*function activeTrigger(data) {
     isNotDetecting();
@@ -108,120 +114,56 @@ function factoryDetection($rootScope) {
     console.log("trigger (" + pattern + ") selected");
   }*/
 
-  function setAllPatterns(patterns) {
-    _imgDetectionPlugin.setPatterns(patterns, function(success){console.log(success);}, function(error){console.log(error);});
-  }
 
-  function toDataUrl(self, cb) {
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
-    var dataURL;
-    canvas.height = self.height;
-    canvas.width = self.width;
-    ctx.drawImage(self, 0, 0);
-    dataURL = canvas.toDataURL("image/jpeg", 0.8);
-
-    if (typeof _imgDetectionPlugin == 'undefined') return;
-
-    _patternsHolder.push(dataURL);
-    _indexes[_loadAllImg] = self.src.substr(self.src.lastIndexOf("/") + 1);
-    _loadAllImg += 1;
-    console.log("!!!", _loadAllImg, _indexes);
-    if(_loadAllImg == _limit){
-      console.log("patterns set", _patternsHolder);
-      setAllPatterns(_patternsHolder);
+  function waitAndSet() {
+    if(window.localStorage && window.localStorage.lang) {
+      _vuforiaCordovaPlugin.setLang(window.localStorage.lang, function(success){console.log(success);}, function(error){console.log(error);});
+    } else {
+      setTimeout(function() {
+        waitAndSet()
+      }, 1000);
     }
-    canvas = null;
-
-    if (cb)
-      cb();
-  };
+  }
 
   function init() {
 
     console.log('init factoryDetection ..');
 
-    if (typeof ImageDetectionPlugin == 'undefined') return;
+    if (typeof VuforiaCordovaPlugin == 'undefined') return;
 
-    _imgDetectionPlugin = window.plugins.ImageDetectionPlugin || new ImageDetectionPlugin();
+    _vuforiaCordovaPlugin = window.plugins.VuforiaCordovaPlugin || new VuforiaCordovaPlugin();
 
+    if (typeof VuforiaCordovaPlugin == 'undefined') return;
 
-    // ------ trigger 1
-
-    _img = new Image();
-    _img.crossOrigin = "Anonymous";
-    _img.onload = function() {
-      toDataUrl(this, function(){
-        // ------ trigger 2
-
-        _img = new Image();
-        _img.crossOrigin = "Anonymous";
-        _img.onload = function() {
-          toDataUrl(this, function(){
-            // ------ trigger 3
-
-            _img = new Image();
-            _img.crossOrigin = "Anonymous";
-            _img.onload = function() {
-              toDataUrl(this);
-            }
-
-            _img.src = "img/patterns/milestone.jpg";
-          });
-        }
-
-        _img.src = "img/patterns/kids.jpg";
-      });
-    }
-
-    _img.src = "img/patterns/tia.jpg";
-
-    if (typeof ImageDetectionPlugin == 'undefined') return;
-
-    _imgDetectionPlugin.isDetecting(function(data){
-      data = JSON.parse(data);
-      isDetecting(data);
+    _vuforiaCordovaPlugin.isDetecting(function(data){
+      if(_shouldDetect) {
+        data = JSON.parse(data);
+        isDetecting(data);
+      } else {
+        console.log('Should call detection:', _shouldDetect, '; data ->', data);
+      }
     }, function(error){
-      isNotDetecting();
+      if(_shouldDetect) {
+        error = JSON.parse(error);
+        isNotDetecting(error);
+      } else {
+        console.log('Should call detection:', _shouldDetect, '; data ->', error);
+      }
     });
 
-    var patternsActions = {
-      "patterns": ["0", "2"],
-      "0": {
-        "type": "video",
-        "src_nl": "energylab25fpsNL",
-        "src_fr": "energylab25fpsFR"
-      },
-      "2": {
-        "type": "object",
-        "object": "milestone_obj",
-        "texture_nl": "milestone_texture_jpg",
-        "texture_fr": "milestone_texture_jpg"
-      }
-    };
-
-    _imgDetectionPlugin.setPatternsActions(patternsActions, function(success){console.log(success);}, function(error){console.log(error);});
+    waitAndSet();
   }
 
   function toggleDetection(state) {
 
-    if (typeof _imgDetectionPlugin == 'undefined' || _imgDetectionPlugin.startProcessing == undefined) {
-      console.log("_imgDetectionPlugin is not defined!");
-      return;
-    }
-
     console.log("toggleDetection->", state);
 
-    _imgDetectionPlugin.startProcessing(state, function(success){console.log(success);}, function(error){console.log(error);});
+    _shouldDetect = state;
+
   }
 
   function detectionTimeout(t) {
-    if (typeof _imgDetectionPlugin == 'undefined' || _imgDetectionPlugin.startProcessing == undefined) {
-      console.log("_imgDetectionPlugin is not defined!");
-      return;
-    }
-
-    _imgDetectionPlugin.setDetectionTimeout(t, function(success){console.log(success);}, function(error){console.log(error);});
+    console.log("toggleTimeout->", t);
   }
 
   return {

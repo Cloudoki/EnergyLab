@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="kids" size="291.000000 411.528595" />
+    <ImageTarget name="tombstone" size="291.000000 411.528595" />
+    <ImageTarget name="tia" size="291.000000 411.528595" />
+  </Tracking>
+</QCARConfig>
