@@ -9,7 +9,7 @@ builder/bower_components
 .idea/
 .DS_Store
 *.keystore
-www
+www/
 npm-debug.log
 
 # ignore vuforia license key file

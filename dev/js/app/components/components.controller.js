@@ -107,6 +107,7 @@ function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
         $scope.content.title_text.active = $scope.content.title_text[$rootScope.activeLang];
         $scope.content.text.active = $scope.content.text[$rootScope.activeLang];
         $scope.content.button.caption.active = $scope.content.button.caption[$rootScope.activeLang];
+				$scope.content.button.link.active = $scope.content.button.link[$rootScope.activeLang];
       }
   );
 
@@ -138,7 +139,11 @@ function InfoCtrl($rootScope, $scope, $element, $timeout, factoryDetection) {
         'fr': 'Visitez notre site Web',
         active: ''
       },
-      link: 'http://onemileaday.be'
+      link: {
+				'nl': 'http://www.onemileaday.be',
+				'fr': 'http://www.onemileaday.be/accueil.html',
+				active: ''
+			}
     }
   };
 

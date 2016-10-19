@@ -14,7 +14,7 @@ Go into `builder/` directory and do an npm and bower install by running the comm
 Any changes to the code is to be made in the dev directory.
 
 ## Dependencies
-Install the dependencies by running `ionic state reset` and add Image Detection Plugin `ionic plugin add https://github.com/Cloudoki/VuforiaCordovaPlugin.git` **(this doesn't work if the repo is private since it requires authentication)** for git or clone the repository and run `ionic plugin add ../path/to/VuforiaCordovaPlugin`
+Install the dependencies by running `ionic state reset` and add Vuforia Cordova Plugin `ionic plugin add https://github.com/Cloudoki/VuforiaCordovaPlugin.git` **(this doesn't work if the repo is private since it requires authentication)** for git or clone the repository and run `ionic plugin add ../path/to/VuforiaCordovaPlugin`
 
 ## IOS
 Add platform `ionic platform add ios`
