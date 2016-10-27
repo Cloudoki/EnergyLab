@@ -21,10 +21,10 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "cordova-plugin-inappbrowser",
-    "ionic-plugin-keyboard",
-    "cordova-plugin-screen-orientation"
+    "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
-    "ios"
+    "ios",
+    "android"
   ]
 }

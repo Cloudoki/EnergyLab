@@ -162,6 +162,18 @@ function factoryDetection($rootScope) {
 
   }
 
+  function toggleScreenRotation(rotate) {
+    var shouldRotate = rotate ? true : false;
+
+    if (typeof VuforiaCordovaPlugin == 'undefined') return;
+
+    _vuforiaCordovaPlugin.rotateScreen(shouldRotate, function(data){
+      console.log('ScreenRotation ->', data);
+    }, function(error){
+      console.log('ScreenRotation ->', error);
+    });
+  }
+
   function detectionTimeout(t) {
     console.log("toggleTimeout->", t);
   }
@@ -175,6 +187,7 @@ function factoryDetection($rootScope) {
     },
     init: init,
     toggleDetection: toggleDetection,
+    toggleScreenRotation: toggleScreenRotation,
     detectionTimeout: detectionTimeout
     //removeLastTrigger: isNotDetecting
   };

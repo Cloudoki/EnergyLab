@@ -262,8 +262,9 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     active.loop ? vid.attr('loop', '') : vid.removeAttr('loop');
     active.loop ? vid.addClass('loop') : vid.removeClass('loop');
 
-    if (active.landscape && screen.lockOrientation)
-      screen.lockOrientation('landscape');
+    // if (active.landscape && screen.lockOrientation)
+    //   screen.lockOrientation('landscape');
+		factoryDetection.toggleScreenRotation(true);
 
     $timeout(function(){
       $('#sven-video').addClass('visible');
@@ -282,8 +283,9 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
 
   $scope.close = function (e, disable) {
 
-    if (screen.lockOrientation)
-      screen.lockOrientation('portrait');
+    // if (screen.lockOrientation)
+    //   screen.lockOrientation('portrait');
+		factoryDetection.toggleScreenRotation(false);
 
     if (e)
       e.stopPropagation();
@@ -350,7 +352,7 @@ function TriggeredSvenCtrl($rootScope, $scope, $element, $timeout, factoryDetect
     .off('ended').on('ended', function() {
       console.log('video ended!');
       $rootScope.$broadcast('videoClose');
-      $scope.close(null, true);
+      $scope.close(null, false);
       //factoryDetection.toggleDetection(true);
       //$rootScope.$broadcast('videoEnded');
     });
