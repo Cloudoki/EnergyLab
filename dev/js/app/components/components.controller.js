@@ -89,6 +89,12 @@ function PopupCtrl($rootScope, $scope, $element, $timeout, factoryData, factoryD
     clearTimeout(timeout);
   });
 
+	$rootScope.$on('popupClose', function (event) {
+    $scope.close();
+		console.log('close and stopped popup cowntdown..');
+    clearTimeout(timeout);
+  });
+
   $rootScope.$on('TRIGGER_DETECTED', function (event) {
     $scope.close();
   });

@@ -2,7 +2,7 @@ angular
   .module('app.factory.detection', [])
   .factory('factoryDetection', factoryDetection);
 
-function factoryDetection($rootScope) {
+function factoryDetection($rootScope, $ionicPopup) {
 
 /*
   var currentTouches = {},
@@ -58,7 +58,9 @@ function factoryDetection($rootScope) {
       _lastTrigger,
       _fakeTriggerIndex = 2,
       _detecting = false,
-      _shouldDetect = true;
+      _shouldDetect = true,
+      _errorMessageTimeout,
+      _removedPopup = false;
 
   function isDetecting(data) {
     _detecting = data.state;
@@ -129,6 +131,12 @@ function factoryDetection($rootScope) {
 
     console.log('init factoryDetection ..');
 
+    _errorMessageTimeout = setTimeout(function() {
+      $rootScope.$broadcast('popupClose');
+      _removedPopup = true;
+      showErrorMessage();
+    }, 30000);
+
     if (typeof VuforiaCordovaPlugin == 'undefined') return;
 
     _vuforiaCordovaPlugin = window.plugins.VuforiaCordovaPlugin || new VuforiaCordovaPlugin();
@@ -152,6 +160,8 @@ function factoryDetection($rootScope) {
     });
 
     waitAndSet();
+
+    removeErrorMessage();
   }
 
   function toggleDetection(state) {
@@ -176,6 +186,37 @@ function factoryDetection($rootScope) {
 
   function detectionTimeout(t) {
     console.log("toggleTimeout->", t);
+  }
+
+  function showErrorMessage() {
+    $ionicPopup.show({
+       title: '<b>Something went wrong!</b>',
+       subTitle: 'Please press <b>reload</b> to try and fix it. <br /><br /><small>If this message shows again after a reload, try to remove and install the app.</small>',
+       buttons: [
+         {
+           text: 'Cancel',
+           onTap: function(e) {
+             $rootScope.$broadcast('popupStart'); // start popup again
+           }
+         },
+         {
+           text: '<b>Reload</b>',
+           type: 'button-calm',
+           onTap: function(e) {
+             window.location.reload(true); // reload page
+           }
+         },
+       ]
+     });
+  }
+
+  function removeErrorMessage() {
+    if(_removedPopup) {
+      $rootScope.$broadcast('popupStart');
+      _removedPopup = false;
+    }
+    clearTimeout(_errorMessageTimeout);
+    console.log("Removed error message timeout.");
   }
 
   return {
